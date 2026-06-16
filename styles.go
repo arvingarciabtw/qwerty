@@ -5,7 +5,8 @@ import (
 	"os"
 	"strings"
 
-	lipgloss "charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/x/ansi"
 )
 
 func getView(m Model) string {
@@ -13,6 +14,10 @@ func getView(m Model) string {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v", err)
 		os.Exit(1)
+	}
+
+	if !m.showInfoBar {
+		return lipgloss.Place(termWidth, termHeight, lipgloss.Left, lipgloss.Bottom, "")
 	}
 
 	bg := lipgloss.NewStyle().
@@ -36,4 +41,26 @@ func getView(m Model) string {
 	s := lipgloss.Place(termWidth, termHeight, lipgloss.Left, lipgloss.Bottom, bottomBar)
 
 	return s
+}
+
+func overlay(bg string, popup string, x, y int) string {
+	bgLines := strings.Split(bg, "\n")
+	popupLines := strings.Split(popup, "\n")
+	for py, pl := range popupLines {
+		by := y + py
+		if by < 0 || by >= len(bgLines) {
+			continue
+		}
+		bl := bgLines[by]
+		bgW := ansi.StringWidth(bl)
+		pw := ansi.StringWidth(pl)
+
+		prefix := ansi.Cut(bl, 0, x)
+		var suffix string
+		if x+pw < bgW {
+			suffix = ansi.Cut(bl, x+pw, bgW)
+		}
+		bgLines[by] = prefix + pl + suffix
+	}
+	return strings.Join(bgLines, "\n")
 }
