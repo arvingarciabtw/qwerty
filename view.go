@@ -70,7 +70,7 @@ func getInfoBar(m Model, terminalWidth int, terminalHeight int) string {
 	activeConfigs := lipgloss.JoinHorizontal(lipgloss.Bottom, activeLayout, " ", activeSize)
 
 	spacerWidth := terminalWidth - lipgloss.Width(activeConfigs) - lipgloss.Width(commands)
-	spacer := strings.Repeat(" ", spacerWidth)
+	spacer := strings.Repeat(" ", max(0, spacerWidth))
 
 	infoBar := lipgloss.JoinHorizontal(lipgloss.Bottom, activeConfigs, spacer, commands)
 	infoBar = lipgloss.Place(terminalWidth, terminalHeight, lipgloss.Left, lipgloss.Bottom, infoBar)
