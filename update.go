@@ -13,6 +13,8 @@ func (m Model) Init() tea.Cmd {
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	hasOpenList := m.showLayoutList || m.showSizeList
+
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
 
@@ -32,6 +34,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 
 		case "?":
+			if hasOpenList {
+				break
+			}
 			m.helpModel.ShowAll = !m.helpModel.ShowAll
 			return m, nil
 
@@ -57,12 +62,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q":
 			isFilteringLayout := m.showLayoutList && m.layoutList.FilterState() == list.Filtering
 			isFilteringSize := m.showSizeList && m.sizeList.FilterState() == list.Filtering
-			hasOpenMenu := m.showLayoutList || m.showSizeList
 
 			if isFilteringLayout || isFilteringSize {
 				break
 			}
-			if hasOpenMenu {
+			if hasOpenList {
 				m.showLayoutList = false
 				m.showSizeList = false
 				return m, nil
