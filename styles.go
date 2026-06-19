@@ -38,6 +38,7 @@ var darkColors = map[Finger]color.Color{
 	FingerMiddle: lipgloss.BrightGreen,
 	FingerIndex:  lipgloss.BrightYellow,
 	FingerThumb:  lipgloss.BrightCyan,
+	FingerAny:    lipgloss.BrightRed,
 }
 
 var lightColors = map[Finger]color.Color{
@@ -46,6 +47,7 @@ var lightColors = map[Finger]color.Color{
 	FingerMiddle: lipgloss.Green,
 	FingerIndex:  lipgloss.Yellow,
 	FingerThumb:  lipgloss.Cyan,
+	FingerAny:    lipgloss.Red,
 }
 
 func init() {

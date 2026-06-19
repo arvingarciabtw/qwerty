@@ -19,6 +19,7 @@ const (
 	FingerMiddle
 	FingerIndex
 	FingerThumb
+	FingerAny
 )
 
 var keyboardSizes = map[int][][]Key{
@@ -126,7 +127,7 @@ var size65 = [][]Key{
 		{Label: "-", Width: 3, Finger: FingerPinky, EvCode: 12},
 		{Label: "=", Width: 3, Finger: FingerPinky, EvCode: 13},
 		{Label: "<--", Width: 8, Finger: FingerPinky, EvCode: 14},
-		{Label: "☼", Width: 3, Finger: FingerPinky, EvCode: 111},
+		{Label: "☼", Width: 3, Finger: FingerAny, EvCode: 111},
 	},
 	// Row 1: Top alpha + PgUp
 	{
@@ -144,7 +145,7 @@ var size65 = [][]Key{
 		{Label: "[", Width: 3, Finger: FingerPinky, EvCode: 26},
 		{Label: "]", Width: 3, Finger: FingerPinky, EvCode: 27},
 		{Label: "\\", Width: 5, Finger: FingerPinky, EvCode: 43},
-		{Label: "⌂", Width: 3, Finger: FingerPinky, EvCode: 102},
+		{Label: "⌂", Width: 3, Finger: FingerAny, EvCode: 102},
 	},
 	// Row 2: Home row + PgDn
 	{
@@ -161,7 +162,7 @@ var size65 = [][]Key{
 		{Label: ";", Width: 3, Finger: FingerPinky, EvCode: 39},
 		{Label: "'", Width: 3, Finger: FingerPinky, EvCode: 40},
 		{Label: "Enter↵", Width: 9, Finger: FingerPinky, EvCode: 28},
-		{Label: "⇡", Width: 3, Finger: FingerPinky, EvCode: 104},
+		{Label: "⇡", Width: 3, Finger: FingerAny, EvCode: 104},
 	},
 	// Row 3: Bottom alpha + Home + End
 	{
@@ -177,8 +178,8 @@ var size65 = [][]Key{
 		{Label: ".", Width: 3, Finger: FingerRing, EvCode: 52},
 		{Label: "/", Width: 3, Finger: FingerPinky, EvCode: 53},
 		{Label: "Shift", Width: 7, Finger: FingerPinky, EvCode: 54},
-		{Label: "↑", Width: 3, Finger: FingerPinky, EvCode: 103},
-		{Label: "⇣", Width: 3, Finger: FingerPinky, EvCode: 109},
+		{Label: "↑", Width: 3, Finger: FingerMiddle, EvCode: 103},
+		{Label: "⇣", Width: 3, Finger: FingerAny, EvCode: 109},
 	},
 	// Row 4: Modifiers + arrows
 	{
@@ -189,9 +190,9 @@ var size65 = [][]Key{
 		{Label: "Alt", Width: 3, Finger: FingerThumb, EvCode: 100},
 		{Label: "Fn", Width: 3, Finger: FingerRing, EvCode: 127},
 		{Label: "Ctrl", Width: 6, Finger: FingerPinky, EvCode: 97},
-		{Label: "←", Width: 3, Finger: FingerPinky, EvCode: 105},
-		{Label: "↓", Width: 3, Finger: FingerPinky, EvCode: 108},
-		{Label: "→", Width: 3, Finger: FingerPinky, EvCode: 106},
+		{Label: "←", Width: 3, Finger: FingerIndex, EvCode: 105},
+		{Label: "↓", Width: 3, Finger: FingerMiddle, EvCode: 108},
+		{Label: "→", Width: 3, Finger: FingerRing, EvCode: 106},
 	},
 }
 
@@ -211,9 +212,9 @@ var size75 = [][]Key{
 		{Label: "F10", Width: 3, Finger: FingerPinky, EvCode: 68},
 		{Label: "F11", Width: 3, Finger: FingerPinky, EvCode: 87},
 		{Label: "F12", Width: 3, Finger: FingerPinky, EvCode: 88},
-		{Label: "⎚", Width: 3, Finger: FingerPinky, EvCode: 99},
-		{Label: "Del", Width: 4, Finger: FingerPinky, EvCode: 111},
-		{Label: "☼", Width: 3, Finger: FingerPinky, EvCode: 119},
+		{Label: "⎚", Width: 3, Finger: FingerAny, EvCode: 99},
+		{Label: "Del", Width: 4, Finger: FingerAny, EvCode: 111},
+		{Label: "☼", Width: 3, Finger: FingerAny, EvCode: 119},
 	},
 	// Row 1: Number row
 	{
@@ -231,7 +232,7 @@ var size75 = [][]Key{
 		{Label: "-", Width: 3, Finger: FingerPinky, EvCode: 12},
 		{Label: "=", Width: 3, Finger: FingerPinky, EvCode: 13},
 		{Label: "<--", Width: 8, Finger: FingerPinky, EvCode: 14},
-		{Label: "⇡", Width: 3, Finger: FingerPinky, EvCode: 104},
+		{Label: "⇡", Width: 3, Finger: FingerAny, EvCode: 104},
 	},
 	// Row 2: Top alpha
 	{
@@ -249,7 +250,7 @@ var size75 = [][]Key{
 		{Label: "[", Width: 3, Finger: FingerPinky, EvCode: 26},
 		{Label: "]", Width: 3, Finger: FingerPinky, EvCode: 27},
 		{Label: "\\", Width: 5, Finger: FingerPinky, EvCode: 43},
-		{Label: "⇣", Width: 3, Finger: FingerPinky, EvCode: 109},
+		{Label: "⇣", Width: 3, Finger: FingerAny, EvCode: 109},
 	},
 	// Row 3: Home row
 	{
@@ -266,7 +267,7 @@ var size75 = [][]Key{
 		{Label: ";", Width: 3, Finger: FingerPinky, EvCode: 39},
 		{Label: "'", Width: 3, Finger: FingerPinky, EvCode: 40},
 		{Label: "Enter↵", Width: 9, Finger: FingerPinky, EvCode: 28},
-		{Label: "⌂", Width: 3, Finger: FingerPinky, EvCode: 102},
+		{Label: "⌂", Width: 3, Finger: FingerAny, EvCode: 102},
 	},
 	// Row 4: Bottom alpha + up arrow
 	{
@@ -282,8 +283,8 @@ var size75 = [][]Key{
 		{Label: ".", Width: 3, Finger: FingerRing, EvCode: 52},
 		{Label: "/", Width: 3, Finger: FingerPinky, EvCode: 53},
 		{Label: "Shift", Width: 7, Finger: FingerPinky, EvCode: 54},
-		{Label: "↑", Width: 3, Finger: FingerPinky, EvCode: 103},
-		{Label: "⌿", Width: 3, Finger: FingerPinky, EvCode: 107},
+		{Label: "↑", Width: 3, Finger: FingerMiddle, EvCode: 103},
+		{Label: "⌿", Width: 3, Finger: FingerAny, EvCode: 107},
 	},
 	// Row 5: Modifiers + arrows
 	{
@@ -294,9 +295,9 @@ var size75 = [][]Key{
 		{Label: "Alt", Width: 3, Finger: FingerThumb, EvCode: 100},
 		{Label: "Fn", Width: 3, Finger: FingerRing, EvCode: 127},
 		{Label: "Ctrl", Width: 6, Finger: FingerPinky, EvCode: 97},
-		{Label: "←", Width: 3, Finger: FingerPinky, EvCode: 105},
-		{Label: "↓", Width: 3, Finger: FingerPinky, EvCode: 108},
-		{Label: "→", Width: 3, Finger: FingerPinky, EvCode: 106},
+		{Label: "←", Width: 3, Finger: FingerIndex, EvCode: 105},
+		{Label: "↓", Width: 3, Finger: FingerMiddle, EvCode: 108},
+		{Label: "→", Width: 3, Finger: FingerRing, EvCode: 106},
 	},
 }
 
@@ -320,9 +321,9 @@ var size80 = [][]Key{
 		{Label: "F11", Width: 3, Finger: FingerPinky, EvCode: 87},
 		{Label: "F12", Width: 3, Finger: FingerPinky, EvCode: 88},
 		{Label: "  ", Width: 2, Finger: FingerIndex, Gap: true, EvCode: 0},
-		{Label: "⎚", Width: 3, Finger: FingerPinky, EvCode: 99},
-		{Label: "⚲", Width: 3, Finger: FingerPinky, EvCode: 70},
-		{Label: "☼", Width: 3, Finger: FingerPinky, EvCode: 119},
+		{Label: "⎚", Width: 3, Finger: FingerIndex, EvCode: 99},
+		{Label: "⚲", Width: 3, Finger: FingerMiddle, EvCode: 70},
+		{Label: "☼", Width: 3, Finger: FingerRing, EvCode: 119},
 	},
 	// Row 1: Number row + Ins + Hme + PgUp
 	{
@@ -341,9 +342,9 @@ var size80 = [][]Key{
 		{Label: "=", Width: 3, Finger: FingerPinky, EvCode: 13},
 		{Label: "<--", Width: 9, Finger: FingerPinky, EvCode: 14},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "Ins", Width: 3, Finger: FingerPinky, EvCode: 110},
-		{Label: "⌂", Width: 3, Finger: FingerPinky, EvCode: 102},
-		{Label: "⇡", Width: 3, Finger: FingerPinky, EvCode: 104},
+		{Label: "Ins", Width: 3, Finger: FingerIndex, EvCode: 110},
+		{Label: "⌂", Width: 3, Finger: FingerMiddle, EvCode: 102},
+		{Label: "⇡", Width: 3, Finger: FingerRing, EvCode: 104},
 	},
 	// Row 2: Top alpha + Del + End + PgDn
 	{
@@ -362,9 +363,9 @@ var size80 = [][]Key{
 		{Label: "]", Width: 3, Finger: FingerPinky, EvCode: 27},
 		{Label: "\\", Width: 5, Finger: FingerPinky, EvCode: 43},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "Del", Width: 3, Finger: FingerPinky, EvCode: 111},
-		{Label: "⌿", Width: 3, Finger: FingerPinky, EvCode: 107},
-		{Label: "⇣", Width: 3, Finger: FingerPinky, EvCode: 109},
+		{Label: "Del", Width: 3, Finger: FingerIndex, EvCode: 111},
+		{Label: "⌿", Width: 3, Finger: FingerMiddle, EvCode: 107},
+		{Label: "⇣", Width: 3, Finger: FingerRing, EvCode: 109},
 	},
 	// Row 3: Home row
 	{
@@ -401,7 +402,7 @@ var size80 = [][]Key{
 		{Label: "Shift", Width: 9, Finger: FingerPinky, EvCode: 54},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, Rightless: true, Leftless: false, EvCode: 0},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
-		{Label: "↑", Width: 3, Finger: FingerPinky, EvCode: 103},
+		{Label: "↑", Width: 3, Finger: FingerMiddle, EvCode: 103},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
 	},
 	// Row 5: Modifiers + arrows
@@ -415,9 +416,9 @@ var size80 = [][]Key{
 		{Label: "Fn", Width: 3, Finger: FingerRing, EvCode: 127},
 		{Label: "Ctrl", Width: 6, Finger: FingerPinky, EvCode: 97},
 		{Label: "  ", Width: 2, Finger: FingerPinky, EvCode: 0},
-		{Label: "←", Width: 3, Finger: FingerPinky, EvCode: 105},
-		{Label: "↓", Width: 3, Finger: FingerPinky, EvCode: 108},
-		{Label: "→", Width: 3, Finger: FingerPinky, EvCode: 106},
+		{Label: "←", Width: 3, Finger: FingerIndex, EvCode: 105},
+		{Label: "↓", Width: 3, Finger: FingerMiddle, EvCode: 108},
+		{Label: "→", Width: 3, Finger: FingerRing, EvCode: 106},
 	},
 }
 
@@ -437,12 +438,12 @@ var size96 = [][]Key{
 		{Label: "F10", Width: 3, Finger: FingerPinky, EvCode: 68},
 		{Label: "F11", Width: 3, Finger: FingerPinky, EvCode: 87},
 		{Label: "F12", Width: 3, Finger: FingerPinky, EvCode: 88},
-		{Label: "Del", Width: 3, Finger: FingerPinky, EvCode: 111},
-		{Label: "⌂", Width: 3, Finger: FingerPinky, EvCode: 102},
-		{Label: "⌿", Width: 3, Finger: FingerPinky, EvCode: 107},
-		{Label: "⇡", Width: 3, Finger: FingerPinky, EvCode: 104},
-		{Label: "⇣", Width: 3, Finger: FingerPinky, EvCode: 109},
-		{Label: "☼", Width: 3, Finger: FingerPinky, EvCode: 119},
+		{Label: "Del", Width: 3, Finger: FingerAny, EvCode: 111},
+		{Label: "⌂", Width: 3, Finger: FingerAny, EvCode: 102},
+		{Label: "⌿", Width: 3, Finger: FingerAny, EvCode: 107},
+		{Label: "⇡", Width: 3, Finger: FingerAny, EvCode: 104},
+		{Label: "⇣", Width: 3, Finger: FingerAny, EvCode: 109},
+		{Label: "☼", Width: 3, Finger: FingerAny, EvCode: 119},
 	},
 	// Row 1: Number row + NmLk + / + * + -
 	{
@@ -460,9 +461,9 @@ var size96 = [][]Key{
 		{Label: "-", Width: 3, Finger: FingerPinky, EvCode: 12},
 		{Label: "=", Width: 3, Finger: FingerPinky, EvCode: 13},
 		{Label: "<--", Width: 7, Finger: FingerPinky, EvCode: 14},
-		{Label: "Nlk", Width: 3, Finger: FingerPinky, EvCode: 69},
-		{Label: "/", Width: 3, Finger: FingerPinky, EvCode: 98},
-		{Label: "*", Width: 3, Finger: FingerPinky, EvCode: 55},
+		{Label: "Nlk", Width: 3, Finger: FingerIndex, EvCode: 69},
+		{Label: "/", Width: 3, Finger: FingerMiddle, EvCode: 98},
+		{Label: "*", Width: 3, Finger: FingerRing, EvCode: 55},
 		{Label: "-", Width: 3, Finger: FingerPinky, EvCode: 74},
 	},
 	// Row 2: Top alpha + 7 + 8 + 9 + +
@@ -481,9 +482,9 @@ var size96 = [][]Key{
 		{Label: "[", Width: 3, Finger: FingerPinky, EvCode: 26},
 		{Label: "]", Width: 3, Finger: FingerPinky, EvCode: 27},
 		{Label: "\\", Width: 3, Finger: FingerPinky, EvCode: 43},
-		{Label: "7", Width: 3, Finger: FingerPinky, EvCode: 71},
-		{Label: "8", Width: 3, Finger: FingerPinky, EvCode: 72},
-		{Label: "9", Width: 3, Finger: FingerPinky, EvCode: 73},
+		{Label: "7", Width: 3, Finger: FingerIndex, EvCode: 71},
+		{Label: "8", Width: 3, Finger: FingerMiddle, EvCode: 72},
+		{Label: "9", Width: 3, Finger: FingerRing, EvCode: 73},
 		{Label: "   ", Width: 3, Finger: FingerPinky, Gap: true, DivLabel: "+", EvCode: 78},
 	},
 	// Row 3: Home row + 4 + 5 + 6 (blank for +)
@@ -501,9 +502,9 @@ var size96 = [][]Key{
 		{Label: ";", Width: 3, Finger: FingerPinky, EvCode: 39},
 		{Label: "'", Width: 3, Finger: FingerPinky, EvCode: 40},
 		{Label: "Enter↵", Width: 8, Finger: FingerPinky, EvCode: 28},
-		{Label: "4", Width: 3, Finger: FingerPinky, EvCode: 75},
-		{Label: "5", Width: 3, Finger: FingerPinky, EvCode: 76},
-		{Label: "6", Width: 3, Finger: FingerPinky, EvCode: 77},
+		{Label: "4", Width: 3, Finger: FingerIndex, EvCode: 75},
+		{Label: "5", Width: 3, Finger: FingerMiddle, EvCode: 76},
+		{Label: "6", Width: 3, Finger: FingerRing, EvCode: 77},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
 	},
 	// Row 4: Bottom alpha + ↑ + 1 + 2 + 3 (blank for ↵)
@@ -520,10 +521,10 @@ var size96 = [][]Key{
 		{Label: ".", Width: 3, Finger: FingerRing, EvCode: 52},
 		{Label: "/", Width: 3, Finger: FingerPinky, EvCode: 53},
 		{Label: "Shift", Width: 7, Finger: FingerPinky, EvCode: 54},
-		{Label: "↑", Width: 3, Finger: FingerPinky, EvCode: 103},
-		{Label: "1", Width: 3, Finger: FingerPinky, EvCode: 79},
-		{Label: "2", Width: 3, Finger: FingerPinky, EvCode: 80},
-		{Label: "3", Width: 3, Finger: FingerPinky, EvCode: 81},
+		{Label: "↑", Width: 3, Finger: FingerMiddle, EvCode: 103},
+		{Label: "1", Width: 3, Finger: FingerIndex, EvCode: 79},
+		{Label: "2", Width: 3, Finger: FingerMiddle, EvCode: 80},
+		{Label: "3", Width: 3, Finger: FingerRing, EvCode: 81},
 		{Label: "   ", Width: 3, Finger: FingerPinky, Gap: true, DivLabel: "↵", EvCode: 96},
 	},
 	// Row 5: Modifiers + arrows + numpad bottom
@@ -535,11 +536,11 @@ var size96 = [][]Key{
 		{Label: "Alt", Width: 5, Finger: FingerThumb, EvCode: 100},
 		{Label: "Fn", Width: 3, Finger: FingerRing, EvCode: 127},
 		{Label: "Ctrl", Width: 6, Finger: FingerPinky, EvCode: 97},
-		{Label: "←", Width: 3, Finger: FingerPinky, EvCode: 105},
-		{Label: "↓", Width: 3, Finger: FingerPinky, EvCode: 108},
-		{Label: "→", Width: 3, Finger: FingerPinky, EvCode: 106},
-		{Label: "0", Width: 3, Finger: FingerPinky, EvCode: 82},
-		{Label: ".", Width: 3, Finger: FingerPinky, EvCode: 83},
+		{Label: "←", Width: 3, Finger: FingerIndex, EvCode: 105},
+		{Label: "↓", Width: 3, Finger: FingerMiddle, EvCode: 108},
+		{Label: "→", Width: 3, Finger: FingerRing, EvCode: 106},
+		{Label: "0", Width: 3, Finger: FingerMiddle, EvCode: 82},
+		{Label: ".", Width: 3, Finger: FingerRing, EvCode: 83},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
 	},
 }
@@ -564,9 +565,9 @@ var size100 = [][]Key{
 		{Label: "F11", Width: 3, Finger: FingerPinky, EvCode: 87},
 		{Label: "F12", Width: 3, Finger: FingerPinky, EvCode: 88},
 		{Label: "  ", Width: 2, Finger: FingerIndex, Gap: true, EvCode: 0},
-		{Label: "⎚", Width: 3, Finger: FingerPinky, EvCode: 99},
-		{Label: "⚲", Width: 3, Finger: FingerPinky, EvCode: 70},
-		{Label: "☼", Width: 3, Finger: FingerPinky, EvCode: 119},
+		{Label: "⎚", Width: 3, Finger: FingerIndex, EvCode: 99},
+		{Label: "⚲", Width: 3, Finger: FingerMiddle, EvCode: 70},
+		{Label: "☼", Width: 3, Finger: FingerRing, EvCode: 119},
 		{Label: " ", Width: 2, Finger: FingerIndex, Gap: true, Rightless: true, EvCode: 0},
 		{Label: " ", Width: 3, Finger: FingerIndex, Rightless: true, Leftless: true, EvCode: 0},
 		{Label: " ", Width: 3, Finger: FingerIndex, Rightless: true, Leftless: true, EvCode: 0},
@@ -590,13 +591,13 @@ var size100 = [][]Key{
 		{Label: "=", Width: 3, Finger: FingerPinky, EvCode: 13},
 		{Label: "<--", Width: 9, Finger: FingerPinky, EvCode: 14},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "Ins", Width: 3, Finger: FingerPinky, EvCode: 110},
-		{Label: "⌂", Width: 3, Finger: FingerPinky, EvCode: 102},
-		{Label: "⇡", Width: 3, Finger: FingerPinky, EvCode: 104},
+		{Label: "Ins", Width: 3, Finger: FingerIndex, EvCode: 110},
+		{Label: "⌂", Width: 3, Finger: FingerMiddle, EvCode: 102},
+		{Label: "⇡", Width: 3, Finger: FingerRing, EvCode: 104},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "Nlk", Width: 3, Finger: FingerPinky, EvCode: 69},
-		{Label: "/", Width: 3, Finger: FingerPinky, EvCode: 98},
-		{Label: "*", Width: 3, Finger: FingerPinky, EvCode: 55},
+		{Label: "Nlk", Width: 3, Finger: FingerIndex, EvCode: 69},
+		{Label: "/", Width: 3, Finger: FingerMiddle, EvCode: 98},
+		{Label: "*", Width: 3, Finger: FingerRing, EvCode: 55},
 		{Label: "-", Width: 3, Finger: FingerPinky, EvCode: 74},
 	},
 	// Row 2: Top alpha + Del + End + PgDn + 7 + 8 + 9 + +
@@ -616,13 +617,13 @@ var size100 = [][]Key{
 		{Label: "]", Width: 3, Finger: FingerPinky, EvCode: 27},
 		{Label: "\\", Width: 5, Finger: FingerPinky, EvCode: 43},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "Del", Width: 3, Finger: FingerPinky, EvCode: 111},
-		{Label: "⌿", Width: 3, Finger: FingerPinky, EvCode: 107},
-		{Label: "⇣", Width: 3, Finger: FingerPinky, EvCode: 109},
+		{Label: "Del", Width: 3, Finger: FingerIndex, EvCode: 111},
+		{Label: "⌿", Width: 3, Finger: FingerMiddle, EvCode: 107},
+		{Label: "⇣", Width: 3, Finger: FingerRing, EvCode: 109},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "7", Width: 3, Finger: FingerPinky, EvCode: 71},
-		{Label: "8", Width: 3, Finger: FingerPinky, EvCode: 72},
-		{Label: "9", Width: 3, Finger: FingerPinky, EvCode: 73},
+		{Label: "7", Width: 3, Finger: FingerIndex, EvCode: 71},
+		{Label: "8", Width: 3, Finger: FingerMiddle, EvCode: 72},
+		{Label: "9", Width: 3, Finger: FingerRing, EvCode: 73},
 		{Label: "   ", Width: 3, Finger: FingerPinky, Gap: true, DivLabel: "+", EvCode: 78},
 	},
 	// Row 3: Home row + gap + 4 + 5 + 6 (blank for +)
@@ -643,9 +644,9 @@ var size100 = [][]Key{
 		{Label: " ", Width: 6, Finger: FingerPinky, Gap: true, Rightless: true, Leftless: false, EvCode: 0},
 		{Label: " ", Width: 3, Finger: FingerPinky, Gap: false, Rightless: true, Leftless: true, EvCode: 0},
 		{Label: " ", Width: 6, Finger: FingerPinky, Gap: true, Rightless: false, Leftless: false, EvCode: 0},
-		{Label: "4", Width: 3, Finger: FingerPinky, EvCode: 75},
-		{Label: "5", Width: 3, Finger: FingerPinky, EvCode: 76},
-		{Label: "6", Width: 3, Finger: FingerPinky, EvCode: 77},
+		{Label: "4", Width: 3, Finger: FingerIndex, EvCode: 75},
+		{Label: "5", Width: 3, Finger: FingerMiddle, EvCode: 76},
+		{Label: "6", Width: 3, Finger: FingerRing, EvCode: 77},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
 	},
 	// Row 4: Bottom alpha + ↑ + gap + 1 + 2 + 3 + (Enter blank)
@@ -664,12 +665,12 @@ var size100 = [][]Key{
 		{Label: "Shift", Width: 9, Finger: FingerPinky, EvCode: 54},
 		{Label: " ", Width: 2, Finger: FingerPinky, Gap: true, Rightless: true, Leftless: false, EvCode: 0},
 		{Label: " ", Width: 3, Finger: FingerPinky, EvCode: 0},
-		{Label: "↑", Width: 3, Finger: FingerPinky, EvCode: 103},
+		{Label: "↑", Width: 3, Finger: FingerMiddle, EvCode: 103},
 		{Label: " ", Width: 3, Finger: FingerPinky, Rightless: true, Leftless: true, EvCode: 0},
 		{Label: " ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "1", Width: 3, Finger: FingerPinky, EvCode: 79},
-		{Label: "2", Width: 3, Finger: FingerPinky, EvCode: 80},
-		{Label: "3", Width: 3, Finger: FingerPinky, EvCode: 81},
+		{Label: "1", Width: 3, Finger: FingerIndex, EvCode: 79},
+		{Label: "2", Width: 3, Finger: FingerMiddle, EvCode: 80},
+		{Label: "3", Width: 3, Finger: FingerRing, EvCode: 81},
 		{Label: " ", Width: 3, Finger: FingerPinky, Gap: true, DivLabel: "↵", EvCode: 96},
 	},
 	// Row 5: Modifiers + arrows + gap + 0 + . + (Enter blank)
@@ -683,12 +684,12 @@ var size100 = [][]Key{
 		{Label: "Fn", Width: 3, Finger: FingerRing, EvCode: 127},
 		{Label: "Ctrl", Width: 6, Finger: FingerPinky, EvCode: 97},
 		{Label: "  ", Width: 2, Finger: FingerPinky, EvCode: 0},
-		{Label: "←", Width: 3, Finger: FingerPinky, EvCode: 105},
-		{Label: "↓", Width: 3, Finger: FingerPinky, EvCode: 108},
-		{Label: "→", Width: 3, Finger: FingerPinky, EvCode: 106},
+		{Label: "←", Width: 3, Finger: FingerIndex, EvCode: 105},
+		{Label: "↓", Width: 3, Finger: FingerMiddle, EvCode: 108},
+		{Label: "→", Width: 3, Finger: FingerRing, EvCode: 106},
 		{Label: "  ", Width: 2, Finger: FingerPinky, Gap: true, EvCode: 0},
-		{Label: "0", Width: 7, Finger: FingerPinky, EvCode: 82},
-		{Label: ".", Width: 3, Finger: FingerPinky, EvCode: 83},
+		{Label: "0", Width: 7, Finger: FingerThumb, EvCode: 82},
+		{Label: ".", Width: 3, Finger: FingerRing, EvCode: 83},
 		{Label: "   ", Width: 3, Finger: FingerPinky, EvCode: 0},
 	},
 }
