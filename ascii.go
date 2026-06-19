@@ -2,6 +2,8 @@ package main
 
 import (
 	"strings"
+
+	ansi "github.com/charmbracelet/x/ansi"
 )
 
 func applyLayout(keys []Key, layoutMap map[string]string) []Key {
@@ -161,4 +163,15 @@ func buildBotLine(keys []Key) string {
 		}
 	}
 	return b.String()
+}
+
+func centerLabel(s string, width int) string {
+	vw := ansi.StringWidth(s)
+	if vw >= width {
+		return s
+	}
+	total := width - vw
+	left := total / 2
+	right := total - left
+	return strings.Repeat(" ", left) + s + strings.Repeat(" ", right)
 }
