@@ -7,28 +7,42 @@ import (
 	lipgloss "charm.land/lipgloss/v2"
 )
 
-var listFrameStyle = lipgloss.NewStyle().Margin(1, 2)
-
 var (
-	listStyle    lipgloss.Style
-	fingerStyle  map[Finger]lipgloss.Style
-	fingerActive map[Finger]lipgloss.Style
-	infoBarStyle lipgloss.Style
+	layoutListStyle   lipgloss.Style
+	sizeListStyle     lipgloss.Style
+	fingerStyle       map[Finger]lipgloss.Style
+	fingerActive      map[Finger]lipgloss.Style
+	infoBarStyle      lipgloss.Style
+	layoutTitleStyle  lipgloss.Style
+	layoutCursorStyle lipgloss.Style
+	sizeTitleStyle    lipgloss.Style
+	sizeCursorStyle   lipgloss.Style
 )
+
+var keyboardBorder = lipgloss.Border{
+	Top:         "─",
+	Bottom:      "─",
+	Left:        "│",
+	Right:       "│",
+	TopLeft:     ",",
+	TopRight:    ",",
+	BottomLeft:  "'",
+	BottomRight: "'",
+}
 
 var darkColors = map[Finger]color.Color{
 	FingerPinky:  lipgloss.BrightMagenta,
-	FingerRing:   lipgloss.BrightRed,
-	FingerMiddle: lipgloss.BrightYellow,
-	FingerIndex:  lipgloss.BrightBlue,
+	FingerRing:   lipgloss.BrightBlue,
+	FingerMiddle: lipgloss.BrightGreen,
+	FingerIndex:  lipgloss.BrightYellow,
 	FingerThumb:  lipgloss.BrightCyan,
 }
 
 var lightColors = map[Finger]color.Color{
 	FingerPinky:  lipgloss.Magenta,
-	FingerRing:   lipgloss.Red,
-	FingerMiddle: lipgloss.Yellow,
-	FingerIndex:  lipgloss.Blue,
+	FingerRing:   lipgloss.Blue,
+	FingerMiddle: lipgloss.Green,
+	FingerIndex:  lipgloss.Yellow,
 	FingerThumb:  lipgloss.Cyan,
 }
 
@@ -36,17 +50,30 @@ func init() {
 	isDark := lipgloss.HasDarkBackground(os.Stdin, os.Stdout)
 
 	colors := darkColors
-	borderColor := lipgloss.BrightBlack
 
 	if !isDark {
 		colors = lightColors
-		borderColor = lipgloss.Black
 	}
 
-	listStyle = lipgloss.NewStyle().
-		BorderForeground(borderColor).
-		Border(lipgloss.ThickBorder()).
-		Padding(1, 2)
+	if isDark {
+		layoutListStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.BrightBlue).
+			Border(keyboardBorder).
+			Padding(1, 3)
+		sizeListStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.BrightMagenta).
+			Border(keyboardBorder).
+			Padding(1, 3)
+	} else {
+		layoutListStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.Blue).
+			Border(keyboardBorder).
+			Padding(1, 3)
+		sizeListStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.Magenta).
+			Border(keyboardBorder).
+			Padding(1, 3)
+	}
 
 	fingerStyle = make(map[Finger]lipgloss.Style, len(colors))
 	fingerActive = make(map[Finger]lipgloss.Style, len(colors))
@@ -65,7 +92,15 @@ func init() {
 
 	if isDark {
 		infoBarStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightBlack)
+		layoutTitleStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightBlue)
+		layoutCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightBlue)
+		sizeTitleStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightMagenta)
+		sizeCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightMagenta)
 	} else {
 		infoBarStyle = lipgloss.NewStyle().Faint(true)
+		layoutTitleStyle = lipgloss.NewStyle().Foreground(lipgloss.Blue)
+		layoutCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.Blue)
+		sizeTitleStyle = lipgloss.NewStyle().Foreground(lipgloss.Magenta)
+		sizeCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.Magenta)
 	}
 }

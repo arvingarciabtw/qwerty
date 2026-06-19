@@ -1,31 +1,91 @@
 package main
 
 import (
-	list "charm.land/bubbles/v2/list"
+	"strings"
+
+	lipgloss "charm.land/lipgloss/v2"
 )
 
-type item struct {
-	title, desc string
+type listModel struct {
+	items       []string
+	selected    int
+	title       string
+	titleStyle  lipgloss.Style
+	cursorStyle lipgloss.Style
 }
 
-func (i item) Title() string       { return i.title }
-func (i item) Description() string { return i.desc }
-func (i item) FilterValue() string { return i.title }
-
-var keyboardLayoutItems = []list.Item{
-	item{title: "QWERTY", desc: "The original"},
-	item{title: "DVORAK", desc: "Efficiency-focused layout"},
-	item{title: "COLEMAK", desc: "Modern ergonomic layout"},
-	item{title: "COLEMAK-DH", desc: "Better thumb positioning"},
-	item{title: "WORKMAN", desc: "Reduces lateral finger movement"},
-	item{title: "AZERTY", desc: "Standard French layout"},
+func (l listModel) windowStart() int {
+	if len(l.items) <= 3 {
+		return 0
+	}
+	return max(0, min(l.selected-1, len(l.items)-3))
 }
 
-var keyboardSizeItems = []list.Item{
-	item{title: "60%", desc: "61 keys"},
-	item{title: "65%", desc: "68 keys"},
-	item{title: "75%", desc: "84 keys"},
-	item{title: "80%", desc: "87 keys"},
-	item{title: "96%", desc: "100 keys"},
-	item{title: "100%", desc: "104 keys"},
+func (l listModel) visibleItems() []string {
+	start := l.windowStart()
+	return l.items[start : start+3]
+}
+
+func (l listModel) View() string {
+	var b strings.Builder
+
+	titleLine := l.titleStyle.Render(l.title)
+	b.WriteString(titleLine)
+	b.WriteString("\n\n")
+
+	maxWidth := lipgloss.Width(titleLine)
+
+	start := l.windowStart()
+	visible := l.visibleItems()
+
+	var itemLines []string
+	for i, item := range visible {
+		var line string
+		if start+i == l.selected {
+			line = l.cursorStyle.Render("> " + item)
+		} else {
+			line = "  " + item
+		}
+		itemLines = append(itemLines, line)
+		if w := lipgloss.Width(line); w > maxWidth {
+			maxWidth = w
+		}
+	}
+
+	for i, line := range itemLines {
+		b.WriteString(line)
+		if i < len(itemLines)-1 {
+			b.WriteString("\n")
+		}
+	}
+
+	b.WriteString("\n\n")
+
+	help := infoBarStyle.Render("↵ / enter • q / quit")
+	helpWidth := lipgloss.Width(help)
+	padding := maxWidth - helpWidth
+	if padding > 0 {
+		b.WriteString(strings.Repeat(" ", padding))
+	}
+	b.WriteString(help)
+
+	return b.String()
+}
+
+var keyboardLayoutItems = []string{
+	"qwerty",
+	"dvorak",
+	"colemak",
+	"colemak-dh",
+	"workman",
+	"azerty",
+}
+
+var keyboardSizeItems = []string{
+	"60%",
+	"65%",
+	"75%",
+	"80%",
+	"96%",
+	"100%",
 }

@@ -14,26 +14,24 @@ import (
 func (m Model) View() tea.View {
 	s := buildBaseView(m)
 
-	hasOpenList := m.showLayoutList || m.showSizeList
-	if hasOpenList {
+	pw := 30
+
+	if m.showLayoutList || m.showSizeList {
 		termW, termH, _ := buildTerminalSize()
 
-		pw := min(60, max(30, termW-4))
-		ph := min(20, max(10, termH-4))
+		var menu string
+		var ph int
+		switch {
+		case m.showLayoutList:
+			ph = 10
+			menu = layoutListStyle.Width(pw).Height(ph).Render(m.layoutList.View())
+		case m.showSizeList:
+			ph = 10
+			menu = sizeListStyle.Width(pw).Height(ph).Render(m.sizeList.View())
+		}
+
 		x := (termW - pw) / 2
 		y := (termH - ph) / 2
-
-		var menu string
-		listStyle.Width(pw).Height(ph)
-
-		if m.showLayoutList {
-			m.layoutList.SetSize(pw-6, ph-4)
-			menu = listStyle.Render(m.layoutList.View())
-		}
-		if m.showSizeList {
-			m.sizeList.SetSize(pw-6, ph-4)
-			menu = listStyle.Render(m.sizeList.View())
-		}
 
 		s = buildOverlay(s, menu, x, y)
 	}

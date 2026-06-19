@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
+
 	help "charm.land/bubbles/v2/help"
-	list "charm.land/bubbles/v2/list"
 )
 
 type Model struct {
-	layoutList     list.Model
-	sizeList       list.Model
+	layoutList     listModel
+	sizeList       listModel
 	activeLayout   string
 	activeSize     int
 	showLayoutList bool
@@ -24,9 +25,35 @@ type GlobalKeyMsg struct {
 
 func getInitModel() Model {
 	cfg := loadConfig()
+	layoutList := listModel{
+		items:       keyboardLayoutItems,
+		selected:    0,
+		title:       "Layouts",
+		titleStyle:  layoutTitleStyle,
+		cursorStyle: layoutCursorStyle,
+	}
+	for i, item := range layoutList.items {
+		if item == cfg.ActiveLayout {
+			layoutList.selected = i
+			break
+		}
+	}
+	sizeList := listModel{
+		items:       keyboardSizeItems,
+		selected:    0,
+		title:       "Sizes",
+		titleStyle:  sizeTitleStyle,
+		cursorStyle: sizeCursorStyle,
+	}
+	for i, item := range sizeList.items {
+		if item == fmt.Sprintf("%d%%", cfg.ActiveSize) {
+			sizeList.selected = i
+			break
+		}
+	}
 	initModel := Model{
-		layoutList:     list.New(keyboardLayoutItems, list.NewDefaultDelegate(), 0, 0),
-		sizeList:       list.New(keyboardSizeItems, list.NewDefaultDelegate(), 0, 0),
+		layoutList:     layoutList,
+		sizeList:       sizeList,
 		activeLayout:   cfg.ActiveLayout,
 		activeSize:     cfg.ActiveSize,
 		showLayoutList: false,
@@ -36,18 +63,14 @@ func getInitModel() Model {
 		pressedKeys:    make(map[uint16]bool),
 	}
 	initModel.helpModel.Styles = help.Styles{
-		FullKey:       infoBarStyle,
-		FullDesc:      infoBarStyle,
-		FullSeparator: infoBarStyle,
-		ShortKey:      infoBarStyle,
-		ShortDesc:     infoBarStyle,
+		FullKey:        infoBarStyle,
+		FullDesc:       infoBarStyle,
+		FullSeparator:  infoBarStyle,
+		ShortKey:       infoBarStyle,
+		ShortDesc:      infoBarStyle,
 		ShortSeparator: infoBarStyle,
-		Ellipsis:      infoBarStyle,
+		Ellipsis:       infoBarStyle,
 	}
-	initModel.layoutList.Title = "Layouts"
-	initModel.layoutList.KeyMap.Quit.SetKeys("q")
-	initModel.sizeList.Title = "Sizes"
-	initModel.sizeList.KeyMap.Quit.SetKeys("q")
 
 	return initModel
 }

@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 
-	list "charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
 )
 
@@ -34,39 +33,57 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 
 		case "?":
-			if hasOpenList {
+			if hasOpenList || m.showQuitConfirm {
 				break
 			}
 			m.helpModel.ShowAll = !m.helpModel.ShowAll
 			return m, nil
 
-		case "enter":
-			if m.showLayoutList && m.layoutList.FilterState() != list.Filtering {
-				if selected, ok := m.layoutList.SelectedItem().(item); ok {
-					m.activeLayout = strings.ToLower(selected.title)
+		case "up", "k", "left":
+			if m.showLayoutList {
+				if m.layoutList.selected > 0 {
+					m.layoutList.selected--
 				}
+				return m, nil
+			}
+			if m.showSizeList {
+				if m.sizeList.selected > 0 {
+					m.sizeList.selected--
+				}
+				return m, nil
+			}
+
+		case "down", "j", "right":
+			if m.showLayoutList {
+				if m.layoutList.selected < len(m.layoutList.items)-1 {
+					m.layoutList.selected++
+				}
+				return m, nil
+			}
+			if m.showSizeList {
+				if m.sizeList.selected < len(m.sizeList.items)-1 {
+					m.sizeList.selected++
+				}
+				return m, nil
+			}
+
+		case "enter":
+			if m.showLayoutList {
+				m.activeLayout = strings.ToLower(m.layoutList.items[m.layoutList.selected])
 				m.showLayoutList = false
 				saveConfig(Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize})
 				return m, nil
 			}
-			if m.showSizeList && m.sizeList.FilterState() != list.Filtering {
-				if selected, ok := m.sizeList.SelectedItem().(item); ok {
-					sizeStr := strings.TrimSuffix(selected.title, "%")
-					if size, err := strconv.Atoi(sizeStr); err == nil {
-						m.activeSize = size
-					}
+			if m.showSizeList {
+				sizeStr := strings.TrimSuffix(m.sizeList.items[m.sizeList.selected], "%")
+				if size, err := strconv.Atoi(sizeStr); err == nil {
+					m.activeSize = size
 				}
 				m.showSizeList = false
 				saveConfig(Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize})
 				return m, nil
 			}
 
-		case "q":
-			isFilteringLayout := m.showLayoutList && m.layoutList.FilterState() == list.Filtering
-			isFilteringSize := m.showSizeList && m.sizeList.FilterState() == list.Filtering
-
-			if isFilteringLayout || isFilteringSize {
-				break
 			}
 			if hasOpenList {
 				m.showLayoutList = false
@@ -83,14 +100,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.pressedKeys[msg.Code] = msg.Down
 
 	case tea.WindowSizeMsg:
-		h, v := listFrameStyle.GetFrameSize()
-		m.layoutList.SetSize(msg.Width-h, msg.Height-v)
-		m.sizeList.SetSize(msg.Width-h, msg.Height-v)
 		m.helpModel.SetWidth(msg.Width)
 	}
 
-	var cmd1, cmd2 tea.Cmd
-	m.layoutList, cmd1 = m.layoutList.Update(msg)
-	m.sizeList, cmd2 = m.sizeList.Update(msg)
-	return m, tea.Batch(cmd1, cmd2)
+	return m, nil
 }
