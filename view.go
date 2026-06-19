@@ -16,7 +16,7 @@ func (m Model) View() tea.View {
 
 	pw := 30
 
-	if m.showLayoutList || m.showSizeList {
+	if m.showLayoutList || m.showSizeList || m.showQuitConfirm {
 		termW, termH, _ := buildTerminalSize()
 
 		var menu string
@@ -28,6 +28,9 @@ func (m Model) View() tea.View {
 		case m.showSizeList:
 			ph = 10
 			menu = sizeListStyle.Width(pw).Height(ph).Render(m.sizeList.View())
+		case m.showQuitConfirm:
+			ph = 8
+			menu = quitConfirmStyle.Width(pw).Height(ph).Render(quitConfirmView(m.quitSelected))
 		}
 
 		x := (termW - pw) / 2
@@ -39,6 +42,28 @@ func (m Model) View() tea.View {
 	v := tea.NewView(s)
 	v.AltScreen = true
 	return v
+}
+
+func quitConfirmView(selected int) string {
+	const contentW = 22
+	center := lipgloss.NewStyle().Width(contentW).AlignHorizontal(lipgloss.Center)
+
+	var b strings.Builder
+	b.WriteString(center.Render("Are you sure you want to quit?"))
+	b.WriteString("\n\n")
+
+	var leftBtn, rightBtn string
+	if selected == 0 {
+		leftBtn = quitCursorStyle.Render("> Quit")
+		rightBtn = "  Cancel"
+	} else {
+		leftBtn = "  Quit"
+		rightBtn = quitCursorStyle.Render("> Cancel")
+	}
+
+	b.WriteString(center.Render(leftBtn + "    " + rightBtn))
+
+	return b.String()
 }
 
 func buildBaseView(m Model) string {

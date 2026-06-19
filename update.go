@@ -52,6 +52,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				return m, nil
 			}
+			if m.showQuitConfirm {
+				m.quitSelected = 0
+				return m, nil
+			}
 
 		case "down", "j", "right":
 			if m.showLayoutList {
@@ -64,6 +68,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if m.sizeList.selected < len(m.sizeList.items)-1 {
 					m.sizeList.selected++
 				}
+				return m, nil
+			}
+			if m.showQuitConfirm {
+				m.quitSelected = 1
 				return m, nil
 			}
 
@@ -83,14 +91,27 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				saveConfig(Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize})
 				return m, nil
 			}
+			if m.showQuitConfirm {
+				if m.quitSelected == 0 {
+					return m, tea.Quit
+				}
+				m.showQuitConfirm = false
+				return m, nil
+			}
 
+		case "q", "esc":
+			if m.showQuitConfirm {
+				m.showQuitConfirm = false
+				return m, nil
 			}
 			if hasOpenList {
 				m.showLayoutList = false
 				m.showSizeList = false
 				return m, nil
 			}
-			return m, tea.Quit
+			m.showQuitConfirm = true
+			m.quitSelected = 0
+			return m, nil
 
 		case "ctrl+c":
 			return m, tea.Quit

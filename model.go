@@ -13,6 +13,8 @@ type Model struct {
 	activeSize     int
 	showLayoutList bool
 	showSizeList   bool
+	showQuitConfirm bool
+	quitSelected   int
 	showInfoBar    bool
 	helpModel      help.Model
 	pressedKeys    map[uint16]bool

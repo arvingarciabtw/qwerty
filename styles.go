@@ -10,6 +10,8 @@ import (
 var (
 	layoutListStyle   lipgloss.Style
 	sizeListStyle     lipgloss.Style
+	quitConfirmStyle  lipgloss.Style
+	quitCursorStyle   lipgloss.Style
 	fingerStyle       map[Finger]lipgloss.Style
 	fingerActive      map[Finger]lipgloss.Style
 	infoBarStyle      lipgloss.Style
@@ -64,6 +66,11 @@ func init() {
 			BorderForeground(lipgloss.BrightMagenta).
 			Border(keyboardBorder).
 			Padding(1, 3)
+		quitConfirmStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.BrightBlack).
+			Border(keyboardBorder).
+			Padding(1, 3)
+		quitCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.BrightRed)
 	} else {
 		layoutListStyle = lipgloss.NewStyle().
 			BorderForeground(lipgloss.Blue).
@@ -73,6 +80,11 @@ func init() {
 			BorderForeground(lipgloss.Magenta).
 			Border(keyboardBorder).
 			Padding(1, 3)
+		quitConfirmStyle = lipgloss.NewStyle().
+			BorderForeground(lipgloss.Black).
+			Border(keyboardBorder).
+			Padding(1, 3)
+		quitCursorStyle = lipgloss.NewStyle().Foreground(lipgloss.Red)
 	}
 
 	fingerStyle = make(map[Finger]lipgloss.Style, len(colors))
