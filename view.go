@@ -100,16 +100,25 @@ func legends(width int) string {
 }
 
 func statusBar(m Model, width int) string {
-	size := m.help.Styles.FullKey.Render(fmt.Sprintf("%d%%", m.activeSize))
-	layout := m.help.Styles.FullDesc.Render(" •︎", m.activeLayout)
+	size := statusBarStyle.Render(fmt.Sprintf("%d%%", m.activeSize))
+	layout := statusBarStyle.Render(" •︎", m.activeLayout)
 
 	actives := lipgloss.JoinHorizontal(lipgloss.Bottom, size, "", layout)
-	bindings := m.help.View(commands)
+	bindings := renderBindings(commands)
 
 	sw := width - lipgloss.Width(actives) - lipgloss.Width(bindings)
 	spacer := strings.Repeat(" ", max(0, sw))
 
 	return lipgloss.JoinHorizontal(lipgloss.Top, actives, spacer, bindings)
+}
+
+func renderBindings(c bindings) string {
+	parts := []string{
+		statusBarStyle.Render(c.Layout.Help().Key) + " " + statusBarStyle.Render(c.Layout.Help().Desc),
+		statusBarStyle.Render(c.Size.Help().Key) + " " + statusBarStyle.Render(c.Size.Help().Desc),
+		statusBarStyle.Render(c.HideKey.Help().Key) + " " + statusBarStyle.Render(c.HideKey.Help().Desc),
+	}
+	return strings.Join(parts, "  ")
 }
 
 func overlay(bg string, ov string, x, y int) string {

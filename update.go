@@ -46,7 +46,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.terminalWidth = msg.Width
 		m.terminalHeight = msg.Height
-		m.help.SetWidth(msg.Width)
 	}
 
 	return m, nil
@@ -109,8 +108,6 @@ func (m Model) handleGlobalKeys(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) {
 
 	case "ctrl+shift+h":
 		m.showAllInfo = !m.showAllInfo
-	case "?":
-		m.help.ShowAll = !m.help.ShowAll
 	case "q", "esc":
 		m.showQuitDialog = true
 		m.quitDialog.selected = 0
