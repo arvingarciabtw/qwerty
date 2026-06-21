@@ -9,14 +9,16 @@ import (
 )
 
 func main() {
-	dev, err := device()
+	devs, err := devices()
 	if err != nil {
 		printDeviceError(err)
 		os.Exit(1)
 	}
 
 	p := tea.NewProgram(initModel())
-	go listenToKeyboard(p, dev)
+	for _, dev := range devs {
+		go listenToKeyboard(p, dev)
+	}
 	_, err = p.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v", err)
@@ -44,21 +46,26 @@ func listenToKeyboard(p *tea.Program, dev *evdev.InputDevice) {
 }
 
 func printDeviceError(err error) {
-	fmt.Fprintf(os.Stderr, `Error: %v
+	fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 
-Adding the user to the input group grants read access to all input
-devices (keyboards, mice, etc.). This is convenient but reduces
-security — any process you run can log your input events.
+	exe, exeErr := os.Executable()
+	if exeErr != nil {
+		exe = "qwerty"
+	}
 
-It needs this access because it reads raw evdev keyboard events
-directly (rather than through a display server or windowing system)
-in order to work inside the TUI.
+	fmt.Fprintf(os.Stderr, `
+This app reads raw evdev keyboard events directly (rather than through
+a display server) in order to work inside the TUI. That requires
+read access to /dev/input/event*, which isn't readable by normal
+users by default.
 
-Options:
-  1. Add user to the input group (convenient, less safe):
-       sudo usermod -aG input $USER
-     Then log out and back in.
-  2. Run with sudo (safer, less convenient):
-       sudo ./qwerty
-`, err)
+Fix: sudo setcap cap_dac_read_search=ep %s
+
+This grants read access to just this binary. It doesn't run as
+root, just bypasses one permission check.
+
+Revoke anytime with: sudo setcap -r %s
+
+Note: re-run this after rebuilding/reinstalling the binary.
+`, exe, exe)
 }
