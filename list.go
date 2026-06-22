@@ -23,13 +23,30 @@ const (
 	listCancel
 )
 
-var layoutListItems = []string{
+var builtinLayoutNames = []string{
 	"qwerty",
 	"dvorak",
 	"colemak",
 	"colemak-dh",
 	"workman",
 	"azerty",
+}
+
+var layoutListItems []string
+
+func init() {
+	seen := make(map[string]bool, len(builtinLayoutNames))
+	layoutListItems = make([]string, 0, len(layouts))
+	for _, name := range builtinLayoutNames {
+		layoutListItems = append(layoutListItems, name)
+		seen[name] = true
+	}
+	for name := range layouts {
+		if !seen[name] {
+			layoutListItems = append(layoutListItems, name)
+			seen[name] = true
+		}
+	}
 }
 
 var layoutSizeItems = []string{

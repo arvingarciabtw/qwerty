@@ -20,10 +20,10 @@ func keyboard(size int, layout string, pressedKeys map[uint16]bool) string {
 		remapped[i] = applyLayout(row, layoutMap)
 	}
 
-	evCodeToLabel := make(map[uint16]string)
+	evCodeToOrigLabel := make(map[uint16]string)
 	for _, row := range rows {
 		for _, k := range row {
-			evCodeToLabel[k.evCode] = k.label
+			evCodeToOrigLabel[k.evCode] = k.label
 		}
 	}
 
@@ -34,20 +34,24 @@ func keyboard(size int, layout string, pressedKeys map[uint16]bool) string {
 		}
 	}
 
-	pressedByLabel := make(map[string]bool)
 	pressedByEvCode := make(map[uint16]bool)
+	pressedByLabel := make(map[string]bool)
 	for code, down := range pressedKeys {
 		if !down {
 			continue
 		}
-		label, ok := evCodeToLabel[code]
+		label, ok := evCodeToOrigLabel[code]
 		if !ok {
+			pressedByEvCode[code] = true
 			continue
 		}
-		if labelCount[label] > 1 {
+		switch count := labelCount[label]; {
+		case count > 1:
 			pressedByEvCode[code] = true
-		} else {
+		case count == 1:
 			pressedByLabel[label] = true
+		default:
+			pressedByEvCode[code] = true
 		}
 	}
 
