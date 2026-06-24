@@ -147,7 +147,7 @@ func renderBindings(c components.Bindings) string {
 		StatusBarStyle.Render(c.Standard.Help().Key) + " " + StatusBarStyle.Render(c.Standard.Help().Desc),
 		StatusBarStyle.Render(c.HideKey.Help().Key) + " " + StatusBarStyle.Render(c.HideKey.Help().Desc),
 	}
-	return strings.Join(parts, "  ")
+	return strings.Join(parts, " • ")
 }
 
 func overlay(bg string, ov string, x, y int) string {

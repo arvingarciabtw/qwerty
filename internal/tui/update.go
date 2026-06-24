@@ -21,21 +21,24 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyPressMsg:
 		switch msg.String() {
-		case "ctrl+shift+l":
+		case "l":
 			m.showLayoutList = !m.showLayoutList
 			m.showSizeList = false
 			return m, nil
-		case "ctrl+shift+s":
+		case "s":
 			m.showSizeList = !m.showSizeList
 			m.showLayoutList = false
 			return m, nil
-		case "ctrl+shift+d":
+		case "d":
 			if m.activeStandard == keyboard.ANSI {
 				m.activeStandard = keyboard.ISO
 			} else {
 				m.activeStandard = keyboard.ANSI
 			}
 			config.SaveConfig(config.Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize, ActiveStandard: m.activeStandard})
+			return m, nil
+		case "h":
+			m.showAllInfo = !m.showAllInfo
 			return m, nil
 		}
 
@@ -122,8 +125,6 @@ func (m Model) handleQuitDialogUpdate(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) 
 func (m Model) handleGlobalKeys(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 
-	case "ctrl+shift+h":
-		m.showAllInfo = !m.showAllInfo
 	case "q", "esc":
 		m.showQuitDialog = true
 		m.quitDialog.Selected = 0

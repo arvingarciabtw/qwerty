@@ -65,16 +65,16 @@ func TestModel_keyPressUp(t *testing.T) {
 
 func TestModel_toggleLayoutList(t *testing.T) {
 	m := testModel(t)
-	result, _ := m.Update(tea.KeyPressMsg{Mod: tea.ModCtrl | tea.ModShift, Code: 'l'})
+	result, _ := m.Update(tea.KeyPressMsg{Code: 'l'})
 	m = result.(Model)
 	if !m.showLayoutList {
-		t.Error("expected showLayoutList to be true after ctrl+shift+l")
+		t.Error("expected showLayoutList to be true after l")
 	}
 }
 
 func TestModel_toggleSizeList(t *testing.T) {
 	m := testModel(t)
-	result, _ := m.Update(tea.KeyPressMsg{Mod: tea.ModCtrl | tea.ModShift, Code: 's'})
+	result, _ := m.Update(tea.KeyPressMsg{Code: 's'})
 	m = result.(Model)
 	if !m.showSizeList {
 		t.Error("expected showSizeList to be true after ctrl+shift+s")
@@ -83,9 +83,9 @@ func TestModel_toggleSizeList(t *testing.T) {
 
 func TestModel_layoutListClosesSizeList(t *testing.T) {
 	m := testModel(t)
-	result, _ := m.Update(tea.KeyPressMsg{Mod: tea.ModCtrl | tea.ModShift, Code: 's'})
+	result, _ := m.Update(tea.KeyPressMsg{Code: 's'})
 	m = result.(Model)
-	result, _ = m.Update(tea.KeyPressMsg{Mod: tea.ModCtrl | tea.ModShift, Code: 'l'})
+	result, _ = m.Update(tea.KeyPressMsg{Code: 'l'})
 	m = result.(Model)
 	if !m.showLayoutList {
 		t.Error("expected showLayoutList to be true")
@@ -117,7 +117,7 @@ func TestModel_toggleInfo(t *testing.T) {
 	if !m.showAllInfo {
 		t.Error("expected showAllInfo to start true")
 	}
-	result, _ := m.Update(tea.KeyPressMsg{Mod: tea.ModCtrl | tea.ModShift, Code: 'h'})
+	result, _ := m.Update(tea.KeyPressMsg{Code: 'h'})
 	m = result.(Model)
 	if m.showAllInfo {
 		t.Error("expected showAllInfo to be false after toggle")
