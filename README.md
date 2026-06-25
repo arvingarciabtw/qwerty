@@ -10,7 +10,7 @@
 
 </div>
 
-<img width="1280" height="685" alt="ditto demo" src="https://github.com/user-attachments/assets/bf71030a-eacd-4eaa-9be5-06adb86de192" />
+<img width="1280" height="685" alt="ditto demo" src="https://github.com/user-attachments/assets/94a25317-e23e-4ace-8ef0-b412f541791a" />
 
 Ditto is a system-wide ASCII keyboard visualizer that captures global key presses. Even if you're outside the terminal session, the visualizer will still keep updating. Hit the repo with a star if you like this little interactive eye candy app! ⭐
 
