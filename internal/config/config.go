@@ -6,14 +6,12 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
-
-	"github.com/arvingarciabtw/ditto/internal/keyboard"
 )
 
 type Config struct {
-	ActiveLayout   string          `json:"active_layout"`
-	ActiveSize     int             `json:"active_size"`
-	ActiveStandard keyboard.Standard `json:"active_standard"`
+	ActiveLayout   string `json:"active_layout"`
+	ActiveSize     int    `json:"active_size"`
+	ActiveStandard string `json:"active_standard"`
 }
 
 const DirName = "ditto"
@@ -29,21 +27,24 @@ func configPath() (string, error) {
 func LoadConfig() Config {
 	path, err := configPath()
 	if err != nil {
-		return Config{ActiveLayout: "qwerty", ActiveSize: 75}
+		return Config{ActiveLayout: "qwerty", ActiveSize: 75, ActiveStandard: "ansi"}
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return Config{ActiveLayout: "qwerty", ActiveSize: 75}
+		return Config{ActiveLayout: "qwerty", ActiveSize: 75, ActiveStandard: "ansi"}
 	}
 	var cfg Config
 	if err := json.Unmarshal(data, &cfg); err != nil {
-		return Config{ActiveLayout: "qwerty", ActiveSize: 75}
+		return Config{ActiveLayout: "qwerty", ActiveSize: 75, ActiveStandard: "ansi"}
 	}
 	if cfg.ActiveLayout == "" {
 		cfg.ActiveLayout = "qwerty"
 	}
 	if cfg.ActiveSize == 0 {
 		cfg.ActiveSize = 75
+	}
+	if cfg.ActiveStandard == "" {
+		cfg.ActiveStandard = "ansi"
 	}
 	return cfg
 }

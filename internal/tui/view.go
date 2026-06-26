@@ -17,7 +17,7 @@ func (m Model) View() tea.View {
 
 	s := base(m)
 
-	hasOverlay := m.showLayoutList || m.showSizeList || m.showQuitDialog
+	hasOverlay := m.showLayoutList || m.showSizeList || m.showStandardList || m.showQuitDialog
 
 	if hasOverlay {
 		tw, th := m.terminalWidth, m.terminalHeight
@@ -33,6 +33,10 @@ func (m Model) View() tea.View {
 			h = min(th, max(11, min(th-4, 13)))
 			m.sizeList.VisibleCount = h - 8
 			ov = OverlayBase.BorderForeground(SizeColor).Width(overlayWidth).Height(h).Render(m.sizeList.View(StatusBarStyle))
+		case m.showStandardList:
+			h = min(th, max(11, min(th-4, 13)))
+			m.standardList.VisibleCount = h - 8
+			ov = OverlayBase.BorderForeground(StandardColor).Width(overlayWidth).Height(h).Render(m.standardList.View(StatusBarStyle))
 		case m.showQuitDialog:
 			h = 8
 			ov = OverlayBase.BorderForeground(QuitBorderColor).Width(overlayWidth).Height(h).Render(m.quitDialog.View())
@@ -117,11 +121,7 @@ func topBar(m Model, width int) string {
 	}
 	legends := sb.String()
 
-	standardLabel := "ansi"
-	if m.activeStandard == keyboard.ISO {
-		standardLabel = "iso"
-	}
-	std := StatusBarStyle.Render(standardLabel)
+	std := StatusBarStyle.Render(m.activeStandard)
 
 	sw := width - lipgloss.Width(legends) - lipgloss.Width(std)
 	spacer := strings.Repeat(" ", max(0, sw))

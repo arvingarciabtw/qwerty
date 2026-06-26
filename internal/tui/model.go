@@ -11,20 +11,22 @@ import (
 )
 
 type Model struct {
-	activeLayout   string
-	activeSize     int
-	activeStandard keyboard.Standard
-	layoutList     components.ListModel
-	sizeList       components.ListModel
-	quitDialog     components.DialogModel
-	showLayoutList bool
-	showSizeList   bool
-	showQuitDialog bool
-	showAllInfo    bool
-	pressedKeys    map[uint16]bool
-	capsLock       bool
-	terminalWidth  int
-	terminalHeight int
+	activeLayout     string
+	activeSize       int
+	activeStandard   string
+	layoutList       components.ListModel
+	sizeList         components.ListModel
+	standardList     components.ListModel
+	quitDialog       components.DialogModel
+	showLayoutList   bool
+	showSizeList     bool
+	showStandardList bool
+	showQuitDialog   bool
+	showAllInfo      bool
+	pressedKeys      map[uint16]bool
+	capsLock         bool
+	terminalWidth    int
+	terminalHeight   int
 }
 
 func InitModel() Model {
@@ -58,16 +60,32 @@ func InitModel() Model {
 		}
 	}
 
+	standardList := components.ListModel{
+		Items:        keyboard.StandardListItems,
+		Selected:     0,
+		Title:        "Standards",
+		AccentColor:  StandardColor,
+		VisibleCount: 3,
+	}
+	for i, item := range standardList.Items {
+		if item == cfg.ActiveStandard {
+			standardList.Selected = i
+			break
+		}
+	}
+
 	return Model{
-		layoutList:     layoutList,
-		sizeList:       sizeList,
-		quitDialog:     components.DialogModel{AccentColor: QuitColor},
-		activeLayout:   cfg.ActiveLayout,
-		activeSize:     cfg.ActiveSize,
-		activeStandard:      cfg.ActiveStandard,
-		showLayoutList: false,
-		showSizeList:   false,
-		showAllInfo:    true,
-		pressedKeys:    make(map[uint16]bool),
+		layoutList:       layoutList,
+		sizeList:         sizeList,
+		standardList:     standardList,
+		quitDialog:       components.DialogModel{AccentColor: QuitColor},
+		activeLayout:     cfg.ActiveLayout,
+		activeSize:       cfg.ActiveSize,
+		activeStandard:   cfg.ActiveStandard,
+		showLayoutList:   false,
+		showSizeList:     false,
+		showStandardList: false,
+		showAllInfo:      true,
+		pressedKeys:      make(map[uint16]bool),
 	}
 }

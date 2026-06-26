@@ -12,6 +12,7 @@ import (
 var (
 	LayoutColor     color.Color
 	SizeColor       color.Color
+	StandardColor   color.Color
 	QuitColor       color.Color
 	QuitBorderColor color.Color
 	OverlayBase     lipgloss.Style
@@ -67,11 +68,13 @@ func init() {
 	if isDark {
 		LayoutColor = lipgloss.BrightBlue
 		SizeColor = lipgloss.BrightMagenta
+		StandardColor = lipgloss.BrightYellow
 		QuitColor = lipgloss.BrightRed
 		QuitBorderColor = lipgloss.BrightBlack
 	} else {
 		LayoutColor = lipgloss.Blue
 		SizeColor = lipgloss.Magenta
+		StandardColor = lipgloss.Yellow
 		QuitColor = lipgloss.Red
 		QuitBorderColor = lipgloss.Black
 	}

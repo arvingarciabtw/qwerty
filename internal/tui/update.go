@@ -8,7 +8,6 @@ import (
 
 	"github.com/arvingarciabtw/ditto/internal/config"
 	"github.com/arvingarciabtw/ditto/internal/evdev"
-	"github.com/arvingarciabtw/ditto/internal/keyboard"
 	"github.com/arvingarciabtw/ditto/internal/tui/components"
 )
 
@@ -24,18 +23,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "l":
 			m.showLayoutList = !m.showLayoutList
 			m.showSizeList = false
+			m.showStandardList = false
 			return m, nil
 		case "s":
 			m.showSizeList = !m.showSizeList
 			m.showLayoutList = false
+			m.showStandardList = false
 			return m, nil
 		case "d":
-			if m.activeStandard == keyboard.ANSI {
-				m.activeStandard = keyboard.ISO
-			} else {
-				m.activeStandard = keyboard.ANSI
-			}
-			config.SaveConfig(config.Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize, ActiveStandard: m.activeStandard})
+			m.showStandardList = !m.showStandardList
+			m.showLayoutList = false
+			m.showSizeList = false
 			return m, nil
 		case "h":
 			m.showAllInfo = !m.showAllInfo
@@ -47,6 +45,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.handleLayoutListUpdate(msg)
 		case m.showSizeList:
 			return m.handleSizeListUpdate(msg)
+		case m.showStandardList:
+			return m.handleStandardListUpdate(msg)
 		case m.showQuitDialog:
 			return m.handleQuitDialogUpdate(msg)
 		default:
@@ -76,7 +76,7 @@ func (m Model) handleLayoutListUpdate(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) 
 	case components.ListConfirm:
 		m.activeLayout = strings.ToLower(m.layoutList.Items[m.layoutList.Selected])
 		if strings.HasSuffix(m.activeLayout, " uk") {
-			m.activeStandard = keyboard.ISO
+			m.activeStandard = "iso"
 		}
 		m.showLayoutList = false
 		config.SaveConfig(config.Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize, ActiveStandard: m.activeStandard})
@@ -102,6 +102,23 @@ func (m Model) handleSizeListUpdate(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) {
 		config.SaveConfig(config.Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize, ActiveStandard: m.activeStandard})
 	case components.ListCancel:
 		m.showSizeList = false
+	}
+
+	return m, nil
+}
+
+func (m Model) handleStandardListUpdate(msg tea.KeyPressMsg) (tea.Model, tea.Cmd) {
+	var action components.ListAction
+	m.standardList, action = m.standardList.Update(msg)
+
+	switch action {
+
+	case components.ListConfirm:
+		m.activeStandard = m.standardList.Items[m.standardList.Selected]
+		m.showStandardList = false
+		config.SaveConfig(config.Config{ActiveLayout: m.activeLayout, ActiveSize: m.activeSize, ActiveStandard: m.activeStandard})
+	case components.ListCancel:
+		m.showStandardList = false
 	}
 
 	return m, nil

@@ -121,7 +121,7 @@ func TestBotLine_format(t *testing.T) {
 
 func TestRender_unknownSize(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 999, ANSI, nil, fs, fa)
+	got := Render("qwerty", 999, "ansi", nil, fs, fa)
 	if got != "" {
 		t.Errorf("expected empty for unknown size, got %q", got)
 	}
@@ -129,7 +129,7 @@ func TestRender_unknownSize(t *testing.T) {
 
 func TestRender_unknownLayout(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("nonexistent", 60, ANSI, nil, fs, fa)
+	got := Render("nonexistent", 60, "ansi", nil, fs, fa)
 	if got == "" {
 		t.Error("expected non-empty rendering for unknown layout (falls back to labels)")
 	}
@@ -137,7 +137,7 @@ func TestRender_unknownLayout(t *testing.T) {
 
 func TestRender_size60_hasRows(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 60, ANSI, nil, fs, fa)
+	got := Render("qwerty", 60, "ansi", nil, fs, fa)
 	lines := strings.Split(got, "\n")
 	if len(lines) < 5 {
 		t.Errorf("expected at least 5 lines, got %d", len(lines))
@@ -146,7 +146,7 @@ func TestRender_size60_hasRows(t *testing.T) {
 
 func TestRender_size60_startsWithComma(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 60, ANSI, nil, fs, fa)
+	got := Render("qwerty", 60, "ansi", nil, fs, fa)
 	lines := strings.Split(got, "\n")
 	if len(lines) == 0 || !strings.HasPrefix(lines[0], ",") {
 		t.Errorf("first line should start with ',', got %q", lines[0])
@@ -156,7 +156,7 @@ func TestRender_size60_startsWithComma(t *testing.T) {
 func TestRender_allSizesRender(t *testing.T) {
 	fs, fa := emptyStyles()
 	for size := range sizes {
-		got := Render("qwerty", size, ANSI, nil, fs, fa)
+		got := Render("qwerty", size, "ansi", nil, fs, fa)
 		if got == "" {
 			t.Errorf("size %d produced empty output", size)
 		}
@@ -166,7 +166,7 @@ func TestRender_allSizesRender(t *testing.T) {
 func TestRender_allSizesStandard(t *testing.T) {
 	fs, fa := emptyStyles()
 	for size := range sizesISO {
-		got := Render("qwerty", size, ISO, nil, fs, fa)
+		got := Render("qwerty", size, "iso", nil, fs, fa)
 		if got == "" {
 			t.Errorf("ISO size %d produced empty output", size)
 		}
@@ -175,7 +175,7 @@ func TestRender_allSizesStandard(t *testing.T) {
 
 func TestRender_Standard_hasEnterOnRow2(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 60, ISO, nil, fs, fa)
+	got := Render("qwerty", 60, "iso", nil, fs, fa)
 	if !strings.Contains(got, "Ent") {
 		t.Error("ISO keyboard should have Enter key on row 2")
 	}
@@ -183,7 +183,7 @@ func TestRender_Standard_hasEnterOnRow2(t *testing.T) {
 
 func TestRender_Standard_hasHashKey(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 60, ISO, nil, fs, fa)
+	got := Render("qwerty", 60, "iso", nil, fs, fa)
 	if !strings.Contains(got, "#") {
 		t.Error("ISO keyboard should have # key on row 3")
 	}
@@ -191,7 +191,7 @@ func TestRender_Standard_hasHashKey(t *testing.T) {
 
 func TestRender_size80_hasGaps(t *testing.T) {
 	fs, fa := emptyStyles()
-	got := Render("qwerty", 80, ANSI, nil, fs, fa)
+	got := Render("qwerty", 80, "ansi", nil, fs, fa)
 	if !strings.Contains(got, "  ") {
 		t.Error("size 80 should have gap spaces")
 	}
@@ -200,8 +200,8 @@ func TestRender_size80_hasGaps(t *testing.T) {
 func TestRender_Standard_allSizesDistinct(t *testing.T) {
 	fs, fa := emptyStyles()
 	for size := range sizes {
-		ansi := Render("qwerty", size, ANSI, nil, fs, fa)
-		std := Render("qwerty", size, ISO, nil, fs, fa)
+		ansi := Render("qwerty", size, "ansi", nil, fs, fa)
+		std := Render("qwerty", size, "iso", nil, fs, fa)
 		if ansi == std {
 			t.Errorf("ISO size %d should differ from ANSI", size)
 		}
@@ -211,7 +211,7 @@ func TestRender_Standard_allSizesDistinct(t *testing.T) {
 func TestQWERTYUKShiftMap(t *testing.T) {
 	fs, fa := emptyStyles()
 	shifted := map[uint16]bool{42: true}
-	got := Render("qwerty uk", 60, ANSI, shifted, fs, fa)
+	got := Render("qwerty uk", 60, "ansi", shifted, fs, fa)
 	if !strings.Contains(got, "\"") {
 		t.Error("UK layout should show \" when shift+2 is held")
 	}
@@ -226,7 +226,7 @@ func TestQWERTYUKShiftMap(t *testing.T) {
 func TestQWERTYUKAltGr(t *testing.T) {
 	fs, fa := emptyStyles()
 	altGr := map[uint16]bool{100: true}
-	got := Render("qwerty uk", 60, ANSI, altGr, fs, fa)
+	got := Render("qwerty uk", 60, "ansi", altGr, fs, fa)
 	if !strings.Contains(got, "Á") {
 		t.Error("UK layout should show Á when AltGr+A is held")
 	}
@@ -238,7 +238,7 @@ func TestQWERTYUKAltGr(t *testing.T) {
 func TestQWERTYUKShiftAltGr(t *testing.T) {
 	fs, fa := emptyStyles()
 	both := map[uint16]bool{42: true, 100: true}
-	got := Render("qwerty uk", 60, ANSI, both, fs, fa)
+	got := Render("qwerty uk", 60, "ansi", both, fs, fa)
 	if !strings.Contains(got, "Á") {
 		t.Error("UK layout should show Á when Shift+AltGr+A is held")
 	}
@@ -250,7 +250,7 @@ func TestQWERTYUKShiftAltGr(t *testing.T) {
 func TestDvorakUKShiftMap(t *testing.T) {
 	fs, fa := emptyStyles()
 	shifted := map[uint16]bool{42: true}
-	got := Render("dvorak uk", 60, ANSI, shifted, fs, fa)
+	got := Render("dvorak uk", 60, "ansi", shifted, fs, fa)
 	if !strings.Contains(got, "\"") {
 		t.Error("Dvorak UK layout should show \" when shift+2 is held")
 	}
@@ -262,7 +262,7 @@ func TestDvorakUKShiftMap(t *testing.T) {
 func TestDvorakUKAltGr(t *testing.T) {
 	fs, fa := emptyStyles()
 	altGr := map[uint16]bool{100: true}
-	got := Render("dvorak uk", 60, ANSI, altGr, fs, fa)
+	got := Render("dvorak uk", 60, "ansi", altGr, fs, fa)
 	if !strings.Contains(got, "Á") {
 		t.Error("Dvorak UK layout should show Á when AltGr+A (QWERTY position) is held")
 	}
@@ -274,7 +274,7 @@ func TestDvorakUKAltGr(t *testing.T) {
 func TestQWERTYUK_BacktickShift(t *testing.T) {
 	fs, fa := emptyStyles()
 	shifted := map[uint16]bool{42: true}
-	got := Render("qwerty uk", 60, ANSI, shifted, fs, fa)
+	got := Render("qwerty uk", 60, "ansi", shifted, fs, fa)
 	if !strings.Contains(got, "¬") {
 		t.Error("UK layout should show ¬ when shift is held (shift+` = ¬)")
 	}
@@ -283,7 +283,7 @@ func TestQWERTYUK_BacktickShift(t *testing.T) {
 func TestQWERTYUK_BacktickAltGr(t *testing.T) {
 	fs, fa := emptyStyles()
 	altGr := map[uint16]bool{100: true}
-	got := Render("qwerty uk", 60, ANSI, altGr, fs, fa)
+	got := Render("qwerty uk", 60, "ansi", altGr, fs, fa)
 	if !strings.Contains(got, "¦") {
 		t.Error("UK layout should show ¦ when AltGr is held (AltGr+` = ¦)")
 	}
@@ -292,7 +292,7 @@ func TestQWERTYUK_BacktickAltGr(t *testing.T) {
 func TestBacktickShift_NonUK(t *testing.T) {
 	fs, fa := emptyStyles()
 	shifted := map[uint16]bool{42: true}
-	got := Render("qwerty", 60, ANSI, shifted, fs, fa)
+	got := Render("qwerty", 60, "ansi", shifted, fs, fa)
 	if !strings.Contains(got, "~") {
 		t.Error("US layout should show ~ when shift+` is held")
 	}

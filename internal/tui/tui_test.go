@@ -81,6 +81,28 @@ func TestModel_toggleSizeList(t *testing.T) {
 	}
 }
 
+func TestModel_toggleStandardList(t *testing.T) {
+	m := testModel(t)
+	result, _ := m.Update(tea.KeyPressMsg{Code: 'd'})
+	m = result.(Model)
+	if !m.showStandardList {
+		t.Error("expected showStandardList to be true after d")
+	}
+}
+
+func TestModel_standardListClosesOthers(t *testing.T) {
+	m := testModel(t)
+	m.showLayoutList = true
+	result, _ := m.Update(tea.KeyPressMsg{Code: 'd'})
+	m = result.(Model)
+	if !m.showStandardList {
+		t.Error("expected showStandardList to be true")
+	}
+	if m.showLayoutList {
+		t.Error("expected showLayoutList to be false when standard opens")
+	}
+}
+
 func TestModel_layoutListClosesSizeList(t *testing.T) {
 	m := testModel(t)
 	result, _ := m.Update(tea.KeyPressMsg{Code: 's'})
@@ -121,6 +143,20 @@ func TestModel_toggleInfo(t *testing.T) {
 	m = result.(Model)
 	if m.showAllInfo {
 		t.Error("expected showAllInfo to be false after toggle")
+	}
+}
+
+func TestModel_standardListConfirm(t *testing.T) {
+	m := testModel(t)
+	m.showStandardList = true
+	m.standardList.Selected = 1
+	result, _ := m.Update(tea.KeyPressMsg{Code: tea.KeyEnter})
+	m = result.(Model)
+	if m.activeStandard != "iso" {
+		t.Errorf("expected activeStandard iso, got %q", m.activeStandard)
+	}
+	if m.showStandardList {
+		t.Error("expected standardList to close after confirm")
 	}
 }
 

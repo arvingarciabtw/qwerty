@@ -5,8 +5,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/arvingarciabtw/ditto/internal/keyboard"
 )
 
 func tempConfigDir(t *testing.T) string {
@@ -57,7 +55,7 @@ func TestLoadConfig_valid(t *testing.T) {
 func TestSaveConfig_writesFile(t *testing.T) {
 	path := tempConfigDir(t)
 
-	SaveConfig(Config{ActiveLayout: "colemak", ActiveSize: 80, ActiveStandard: keyboard.ISO})
+	SaveConfig(Config{ActiveLayout: "colemak", ActiveSize: 80, ActiveStandard: "iso"})
 
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -78,7 +76,7 @@ func TestSaveConfig_writesFile(t *testing.T) {
 func TestSaveLoad_roundTrip(t *testing.T) {
 	tempConfigDir(t)
 
-	original := Config{ActiveLayout: "azerty", ActiveSize: 100, ActiveStandard: keyboard.ISO}
+	original := Config{ActiveLayout: "azerty", ActiveSize: 100, ActiveStandard: "iso"}
 	SaveConfig(original)
 
 	loaded := LoadConfig()

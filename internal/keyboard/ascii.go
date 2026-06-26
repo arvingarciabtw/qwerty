@@ -9,9 +9,9 @@ import (
 	ansi "github.com/charmbracelet/x/ansi"
 )
 
-func Render(layout string, size int, standard Standard, pressedKeys map[uint16]bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
+func Render(layout string, size int, standard string, pressedKeys map[uint16]bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
 	keyboardSizes := sizes
-	if standard == ISO {
+	if standard == "iso" {
 		keyboardSizes = sizesISO
 	}
 	rows, ok := keyboardSizes[size]
