@@ -6,6 +6,8 @@ import (
 
 	lipgloss "charm.land/lipgloss/v2"
 	evdev "github.com/gvalkov/golang-evdev"
+
+	"github.com/arvingarciabtw/ditto/internal/keyboard/standards"
 )
 
 func emptyStyles() (map[Finger]lipgloss.Style, map[Finger]lipgloss.Style) {
@@ -62,44 +64,44 @@ func TestCenterLabel_wideChars(t *testing.T) {
 
 func TestApplyLayout_withMap(t *testing.T) {
 	layoutMap := map[string]string{"A": "B", "C": "D"}
-	keys := []key{
-		{label: "A", width: 3},
-		{label: "C", width: 3},
-		{label: "E", width: 3},
+	keys := []Key{
+		{Label: "A", Width: 3},
+		{Label: "C", Width: 3},
+		{Label: "E", Width: 3},
 	}
 	result := applyLayout(keys, layoutMap)
-	if result[0].label != "B" {
-		t.Errorf("expected B, got %q", result[0].label)
+	if result[0].Label != "B" {
+		t.Errorf("expected B, got %q", result[0].Label)
 	}
-	if result[1].label != "D" {
-		t.Errorf("expected D, got %q", result[1].label)
+	if result[1].Label != "D" {
+		t.Errorf("expected D, got %q", result[1].Label)
 	}
-	if result[2].label != "E" {
-		t.Errorf("expected E (unchanged), got %q", result[2].label)
+	if result[2].Label != "E" {
+		t.Errorf("expected E (unchanged), got %q", result[2].Label)
 	}
 }
 
 func TestApplyLayout_nilMap(t *testing.T) {
-	keys := []key{{label: "A", width: 3}}
+	keys := []Key{{Label: "A", Width: 3}}
 	result := applyLayout(keys, nil)
-	if result[0].label != "A" {
-		t.Errorf("expected A unchanged, got %q", result[0].label)
+	if result[0].Label != "A" {
+		t.Errorf("expected A unchanged, got %q", result[0].Label)
 	}
 }
 
 func TestApplyLayout_originalUnmodified(t *testing.T) {
 	layoutMap := map[string]string{"A": "B"}
-	keys := []key{{label: "A", width: 3}}
+	keys := []Key{{Label: "A", Width: 3}}
 	applyLayout(keys, layoutMap)
-	if keys[0].label != "A" {
+	if keys[0].Label != "A" {
 		t.Errorf("applyLayout must not modify original slice")
 	}
 }
 
 func TestTopLine_format(t *testing.T) {
-	keys := []key{
-		{label: "A", width: 3},
-		{label: "B", width: 3},
+	keys := []Key{
+		{Label: "A", Width: 3},
+		{Label: "B", Width: 3},
 	}
 	got := topLine(keys)
 	want := ",---,---,"
@@ -109,9 +111,9 @@ func TestTopLine_format(t *testing.T) {
 }
 
 func TestBotLine_format(t *testing.T) {
-	keys := []key{
-		{label: "A", width: 3},
-		{label: "B", width: 3},
+	keys := []Key{
+		{Label: "A", Width: 3},
+		{Label: "B", Width: 3},
 	}
 	got := botLine(keys)
 	want := "'---'---'"
@@ -156,7 +158,7 @@ func TestRender_size60_startsWithComma(t *testing.T) {
 
 func TestRender_allSizesRender(t *testing.T) {
 	fs, fa := emptyStyles()
-	for size := range sizesANSI {
+	for size := range standards.SizesANSI {
 		got := Render("qwerty", size, "ansi", nil, fs, fa)
 		if got == "" {
 			t.Errorf("size %d produced empty output", size)
@@ -166,7 +168,7 @@ func TestRender_allSizesRender(t *testing.T) {
 
 func TestRender_allSizesStandard(t *testing.T) {
 	fs, fa := emptyStyles()
-	for size := range sizesISO {
+	for size := range standards.SizesISO {
 		got := Render("qwerty", size, "iso", nil, fs, fa)
 		if got == "" {
 			t.Errorf("ISO size %d produced empty output", size)
@@ -200,7 +202,7 @@ func TestRender_size80_hasGaps(t *testing.T) {
 
 func TestRender_Standard_allSizesDistinct(t *testing.T) {
 	fs, fa := emptyStyles()
-	for size := range sizesANSI {
+	for size := range standards.SizesANSI {
 		ansi := Render("qwerty", size, "ansi", nil, fs, fa)
 		std := Render("qwerty", size, "iso", nil, fs, fa)
 		if ansi == std {
@@ -283,7 +285,7 @@ func TestQWERTYUK_BacktickShift(t *testing.T) {
 
 func TestJIS_allSizesHaveJISKeys(t *testing.T) {
 	fs, fa := emptyStyles()
-	for size := range sizesJIS {
+	for size := range standards.SizesJIS {
 		got := Render("qwerty", size, "jis", nil, fs, fa)
 		if got == "" {
 			t.Errorf("JIS size %d produced empty output", size)

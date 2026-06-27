@@ -1,5 +1,7 @@
 package keyboard
 
+import "github.com/arvingarciabtw/ditto/internal/keyboard/base"
+
 var layouts = map[string]map[string]string{
 	"qwerty": nil,
 
@@ -99,75 +101,14 @@ var layouts = map[string]map[string]string{
 }
 
 var shiftMaps = map[string]map[string]string{
-	"qwerty uk": ukShift,
-	"dvorak uk": ukShift,
-	"azerty":    azertyShift,
+	"qwerty uk": base.UKShift,
+	"dvorak uk": base.UKShift,
+	"azerty":    base.AZERTYShift,
 }
 
 var altGrMaps = map[string]map[string]string{
-	"qwerty uk": ukAltGr,
-	"dvorak uk": ukAltGr,
-}
-
-var usShift = map[string]string{
-	"`": "~", "1": "!", "2": "@", "3": "#", "4": "$",
-	"5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
-	"-": "_", "=": "+", "[": "{", "]": "}", "\\": "|",
-	";": ":", "'": "\"", ",": "<", ".": ">", "/": "?",
-}
-
-var ukShift = map[string]string{
-	"`": "¬", "1": "!", "2": "\"", "3": "£", "4": "$",
-	"5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
-	"-": "_", "=": "+", "[": "{", "]": "}", "\\": "|",
-	";": ":", "'": "@", ",": "<", ".": ">", "/": "?",
-	"#": "~",
-}
-
-var azertyShift = map[string]string{
-	"²": "~", "&": "1", "É": "2", "\"": "3", "'": "4",
-	"(": "5", "-": "6", "È": "7", "_": "8",
-	"Ç": "9", "À": "0", ")": "°",
-	"^": "¨", "$": "£",
-}
-
-var jisShift = map[string]string{
-	"`": "~", "1": "!", "2": "\"", "3": "#", "4": "$",
-	"5": "%", "6": "&", "7": "'", "8": "(", "9": ")", "0": "",
-	"-": "=", "^": "~", "¥": "|",
-	"@": "`", "[": "{",
-	";": "+", ":": "*", "]": "}",
-	",": "<", ".": ">", "/": "?", "\\": "_",
-}
-
-var abntShift = map[string]string{
-	"'": "\"", "1": "!", "2": "@", "3": "#", "4": "$",
-	"5": "%", "6": "¨", "7": "&", "8": "*", "9": "(", "0": ")", "´": "`",
-	"-": "_", "=": "+", "~": "^",
-	"[": "{", "]": "}", "\\": "|",
-	";": ":", ",": "<", ".": ">", "/": "?",
-}
-
-var ukAltGr = map[string]string{
-	"4": "€",
-	"`": "¦",
-	"A": "Á", "E": "É", "I": "Í", "O": "Ó", "U": "Ú",
-}
-
-var ksShift = map[string]string{
-	"`": "~", "1": "!", "2": "@", "3": "#", "4": "$",
-	"5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
-	"-": "_", "=": "+", "[": "{", "]": "}", "\\": "|",
-	";": ":", "'": "\"", ",": "<", ".": ">", "/": "?",
-	"₩": "|",
-}
-
-var abntAltGr = map[string]string{
-	"1": "¹", "2": "²", "3": "³", "=": "§",
-	"4": "£", "5": "¢", "6": "¬",
-	"Q": "/", "W": "?", "E": "€",
-	"[": "ª", "]": "º",
-	"C": "₢",
+	"qwerty uk": base.UKAltGr,
+	"dvorak uk": base.UKAltGr,
 }
 
 var BuiltinLayoutNames = []string{

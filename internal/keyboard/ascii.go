@@ -1,5 +1,8 @@
-// Package keyboard renders the ASCII keyboard visualization and manages
-// layout remapping (qwerty, dvorak, colemak, etc.) and custom layout files.
+/*
+Package keyboard provides the public API for keyboard rendering and layout management:
+ASCII keyboard display, logical layout maps, custom layout loading, and re-exports of
+shared types and constants from the base and standards subpackages.
+*/
 package keyboard
 
 import (
@@ -8,6 +11,8 @@ import (
 	lipgloss "charm.land/lipgloss/v2"
 	ansi "github.com/charmbracelet/x/ansi"
 	evdev "github.com/gvalkov/golang-evdev"
+
+	"github.com/arvingarciabtw/ditto/internal/keyboard/standards"
 )
 
 func Render(layout string, size int, standard string, pressedKeys map[uint16]bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
@@ -15,13 +20,13 @@ func Render(layout string, size int, standard string, pressedKeys map[uint16]boo
 	if !ok {
 		return ""
 	}
-	rows, ok := sd.sizes[size]
+	rows, ok := sd.Sizes[size]
 	if !ok {
 		return ""
 	}
 
 	layoutMap := layouts[layout]
-	remapped := make([][]key, len(rows))
+	remapped := make([][]Key, len(rows))
 	for i, row := range rows {
 		remapped[i] = applyLayout(row, layoutMap)
 	}
@@ -31,11 +36,11 @@ func Render(layout string, size int, standard string, pressedKeys map[uint16]boo
 	kanaHeld := pressedKeys[evdev.KEY_KATAKANAHIRAGANA]
 	hangeulHeld := pressedKeys[evdev.KEY_HANGEUL]
 
-	shiftMap := sd.shiftMap
+	shiftMap := sd.ShiftMap
 	if lm, ok := shiftMaps[layout]; ok {
 		shiftMap = lm
 	}
-	altGrMap := sd.altGrMap
+	altGrMap := sd.AltGrMap
 	if am, ok := altGrMaps[layout]; ok {
 		altGrMap = am
 	}
@@ -51,12 +56,12 @@ func Render(layout string, size int, standard string, pressedKeys map[uint16]boo
 	return renderKeys(remapped, pressed, fingerStyle, fingerActive)
 }
 
-func applyLayout(keys []key, layoutMap map[string]string) []key {
-	result := make([]key, len(keys))
+func applyLayout(keys []Key, layoutMap map[string]string) []Key {
+	result := make([]Key, len(keys))
 	for i, k := range keys {
 		if layoutMap != nil {
-			if newLabel, ok := layoutMap[k.label]; ok {
-				k.label = newLabel
+			if newLabel, ok := layoutMap[k.Label]; ok {
+				k.Label = newLabel
 			}
 		}
 		result[i] = k
@@ -64,30 +69,30 @@ func applyLayout(keys []key, layoutMap map[string]string) []key {
 	return result
 }
 
-func resolveStandard(standard string) (standardData, bool) {
-	sd, ok := standards[standard]
+func resolveStandard(standard string) (Data, bool) {
+	sd, ok := standards.All[standard]
 	return sd, ok
 }
 
-func resolvePressed(rows, remapped [][]key, pressedKeys map[uint16]bool) [][]bool {
+func resolvePressed(rows, remapped [][]Key, pressedKeys map[uint16]bool) [][]bool {
 	evCodeToOrigLabel := make(map[uint16]string)
 	for _, row := range rows {
 		for _, k := range row {
-			evCodeToOrigLabel[k.evCode] = k.label
+			evCodeToOrigLabel[k.EvCode] = k.Label
 		}
 	}
 
 	labelCount := make(map[string]int)
 	for _, row := range remapped {
 		for _, k := range row {
-			labelCount[k.label]++
+			labelCount[k.Label]++
 		}
 	}
 
 	evCodeCount := make(map[uint16]int)
 	for _, row := range rows {
 		for _, k := range row {
-			evCodeCount[k.evCode]++
+			evCodeCount[k.EvCode]++
 		}
 	}
 
@@ -120,7 +125,7 @@ func resolvePressed(rows, remapped [][]key, pressedKeys map[uint16]bool) [][]boo
 	for i, keys := range remapped {
 		pressed[i] = make([]bool, len(keys))
 		for j, k := range keys {
-			if pressedByEvCode[k.evCode] || pressedByLabel[k.label] {
+			if pressedByEvCode[k.EvCode] || pressedByLabel[k.Label] {
 				pressed[i][j] = true
 			}
 		}
@@ -128,64 +133,64 @@ func resolvePressed(rows, remapped [][]key, pressedKeys map[uint16]bool) [][]boo
 	return pressed
 }
 
-func applyModifiers(keys [][]key, shiftHeld bool, shiftMap map[string]string, altGrHeld bool, altGrMap map[string]string) {
+func applyModifiers(keys [][]Key, shiftHeld bool, shiftMap map[string]string, altGrHeld bool, altGrMap map[string]string) {
 	for _, row := range keys {
 		if altGrHeld && altGrMap != nil {
 			for j := range row {
-				if newLabel, ok := altGrMap[row[j].label]; ok {
-					row[j].label = newLabel
+				if newLabel, ok := altGrMap[row[j].Label]; ok {
+					row[j].Label = newLabel
 				}
 			}
 			if shiftHeld {
 				for j := range row {
-					row[j].label = strings.ToUpper(row[j].label)
+					row[j].Label = strings.ToUpper(row[j].Label)
 				}
 			}
 		} else if shiftHeld && shiftMap != nil {
 			for j := range row {
-				if newLabel, ok := shiftMap[row[j].label]; ok {
-					row[j].label = newLabel
+				if newLabel, ok := shiftMap[row[j].Label]; ok {
+					row[j].Label = newLabel
 				}
 			}
 		}
 	}
 }
 
-func applyHangeul(keys [][]key, shiftHeld bool) {
+func applyKana(keys [][]Key, shiftHeld bool) {
 	for _, row := range keys {
 		for j := range row {
-			label := row[j].label
+			label := row[j].Label
 			if shiftHeld {
-				if tensed, ok := hangeulTensed[label]; ok {
-					row[j].label = tensed
+				if v, ok := standards.KanaSmallMap[label]; ok {
+					row[j].Label = v
 					continue
 				}
 			}
-			if v, ok := hangeulLayout[label]; ok {
-				row[j].label = v
+			if v, ok := standards.KanaLayout[label]; ok {
+				row[j].Label = v
 			}
 		}
 	}
 }
 
-func applyKana(keys [][]key, shiftHeld bool) {
+func applyHangeul(keys [][]Key, shiftHeld bool) {
 	for _, row := range keys {
 		for j := range row {
-			label := row[j].label
+			label := row[j].Label
 			if shiftHeld {
-				if v, ok := kanaSmallMap[label]; ok {
-					row[j].label = v
+				if tensed, ok := standards.HangeulTensed[label]; ok {
+					row[j].Label = tensed
 					continue
 				}
 			}
-			if v, ok := kanaLayout[label]; ok {
-				row[j].label = v
+			if v, ok := standards.HangeulLayout[label]; ok {
+				row[j].Label = v
 			}
 		}
 	}
 }
 
-func renderKeys(keys [][]key, pressed [][]bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
+func renderKeys(keys [][]Key, pressed [][]bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
 	var lines []string
 	for i, kr := range keys {
 		if i == 0 {
@@ -201,21 +206,21 @@ func renderKeys(keys [][]key, pressed [][]bool, fingerStyle, fingerActive map[Fi
 	return strings.Join(lines, "\n")
 }
 
-func topLine(keys []key) string {
+func topLine(keys []Key) string {
 	var b strings.Builder
 	b.WriteByte(',')
 	for _, k := range keys {
-		b.WriteString(strings.Repeat("-", k.width))
+		b.WriteString(strings.Repeat("-", k.Width))
 		b.WriteByte(',')
 	}
 	return b.String()
 }
 
-func midLine(keys []key, pressed []bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
+func midLine(keys []Key, pressed []bool, fingerStyle, fingerActive map[Finger]lipgloss.Style) string {
 	var b strings.Builder
 	for i, k := range keys {
-		label := k.label
-		if k.divLabel != "" {
+		label := k.Label
+		if k.DivLabel != "" {
 			label = ""
 		}
 
@@ -223,26 +228,26 @@ func midLine(keys []key, pressed []bool, fingerStyle, fingerActive map[Finger]li
 
 		if i == 0 {
 			if isPressed {
-				b.WriteString(fingerActive[k.finger].Render("|"))
+				b.WriteString(fingerActive[k.Finger].Render("|"))
 			} else {
 				b.WriteByte('|')
 			}
 		}
 
 		if isPressed {
-			b.WriteString(fingerActive[k.finger].Render(centerLabel(label, k.width)))
+			b.WriteString(fingerActive[k.Finger].Render(centerLabel(label, k.Width)))
 		} else {
-			b.WriteString(fingerStyle[k.finger].Render(centerLabel(label, k.width)))
+			b.WriteString(fingerStyle[k.Finger].Render(centerLabel(label, k.Width)))
 		}
 
-		if k.rightless {
+		if k.Rightless {
 			b.WriteByte(' ')
 		} else {
 			nextPressed := i+1 < len(pressed) && pressed[i+1]
 			if isPressed || nextPressed {
-				f := k.finger
+				f := k.Finger
 				if nextPressed && !isPressed {
-					f = keys[i+1].finger
+					f = keys[i+1].Finger
 				}
 				b.WriteString(fingerActive[f].Render("|"))
 			} else {
@@ -253,25 +258,25 @@ func midLine(keys []key, pressed []bool, fingerStyle, fingerActive map[Finger]li
 	return b.String()
 }
 
-func divLine(keys []key, fingerStyle map[Finger]lipgloss.Style) string {
+func divLine(keys []Key, fingerStyle map[Finger]lipgloss.Style) string {
 	var b strings.Builder
 	b.WriteByte('|')
 	for _, k := range keys {
-		if k.gap {
-			if k.divLabel != "" {
-				b.WriteString(fingerStyle[k.finger].Render(centerLabel(k.divLabel, k.width)))
+		if k.Gap {
+			if k.DivLabel != "" {
+				b.WriteString(fingerStyle[k.Finger].Render(centerLabel(k.DivLabel, k.Width)))
 			} else {
-				b.WriteString(strings.Repeat(" ", k.width))
+				b.WriteString(strings.Repeat(" ", k.Width))
 			}
-			if k.rightless {
+			if k.Rightless {
 				b.WriteByte(',')
 			} else {
 				b.WriteByte('\'')
 			}
 			continue
 		}
-		b.WriteString(strings.Repeat("-", k.width))
-		if k.leftless {
+		b.WriteString(strings.Repeat("-", k.Width))
+		if k.Leftless {
 			b.WriteByte(',')
 		} else {
 			b.WriteByte('\'')
@@ -280,12 +285,12 @@ func divLine(keys []key, fingerStyle map[Finger]lipgloss.Style) string {
 	return b.String()
 }
 
-func botLine(keys []key) string {
+func botLine(keys []Key) string {
 	var b strings.Builder
 	b.WriteByte('\'')
 	for _, k := range keys {
-		b.WriteString(strings.Repeat("-", k.width))
-		if k.leftless {
+		b.WriteString(strings.Repeat("-", k.Width))
+		if k.Leftless {
 			b.WriteByte(',')
 		} else {
 			b.WriteByte('\'')

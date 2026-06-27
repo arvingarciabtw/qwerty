@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/arvingarciabtw/ditto/internal/keyboard/base"
 )
 
 type customLayoutFile struct {
@@ -51,7 +53,7 @@ func init() {
 		if clf.Shift != nil {
 			shiftMaps[name] = clf.Shift
 		} else {
-			shiftMaps[name] = usShift
+			shiftMaps[name] = base.USShift
 		}
 	}
 }
