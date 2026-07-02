@@ -78,6 +78,8 @@ cd ditto
 go build -o ditto ./cmd/ditto/
 ```
 
+Before executing the program with `ditto`, refer to the [permissions](#permissions) section below. You can also specify flags when executing ditto, particularly for locking the keyboard. See the [usage](#usage) section for more details on that.
+
 ## Permissions
 
 > [!IMPORTANT]
@@ -156,6 +158,14 @@ Each `.json` file becomes a named layout (the filename without extension). Forma
 - **shift is optional** — shifted state mappings; falls back to US QWERTY shift if omitted
 
 The layout will automatically appear in the layout list the next time you launch Ditto.
+
+### Locking
+
+If you're happy with the current layout and want to keep that permanently every time you run the program, you can lock the keyboard with `ditto --lock`. Locking it means that your visual settings will not work. Bindings for opening up a list, toggling the TUI text with `h`, or toggling the logograms with `c` will intentionally not work.
+
+Inversely, you can just do `ditto --unlock` to unlock the keyboard.
+
+If you prefer, you can also just edit the config file at `~/.config/ditto/config.json` to change the value of the `locked` key.
 
 ## Roadmap
 
